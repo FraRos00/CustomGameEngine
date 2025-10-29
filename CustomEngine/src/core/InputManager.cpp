@@ -7,10 +7,10 @@ InputManager &InputManager::GetInstance() {
 }
 
 InputManager::InputManager() {
-  bindings[Action::MoveLeft] = KEY_D;
-  bindings[Action::MoveRight] = KEY_A;
-  bindings[Action::MoveUp] = KEY_S;
-  bindings[Action::MoveDown] = KEY_W;
+  bindings[Action::MoveLeft] = KEY_A;
+  bindings[Action::MoveRight] = KEY_D;
+  bindings[Action::MoveUp] = KEY_W;
+  bindings[Action::MoveDown] = KEY_S;
   bindings[Action::Attack] = KEY_SPACE;
   bindings[Action::Pause] = KEY_ESCAPE;
 }

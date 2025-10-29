@@ -6,9 +6,9 @@ CXXFLAGS := -std=c++17 -Wall -Wextra -Iinclude -MMD -MP
 # CXX_FLAGS := -std=c++17 -Iinclude -MMD -MP -O2
 
 # Per Windows
-# LIBS := -lraylib -lopengl32 -lgdi32 -lwinmm
+LIBS := -lraylib -lopengl32 -lgdi32 -lwinmm
 # Per linux
-LIBS := -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
+# LIBS := -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
 
 SRC_DIR := src
 BUILD_DIR := build

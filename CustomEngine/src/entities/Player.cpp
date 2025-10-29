@@ -28,4 +28,4 @@ void Player::Update(float dt) {
   dir={0.0f, 0.0f};
 }
 
-void Player::Draw() const { DrawRectangleRec(hitbox, BLUE); }
+void Player::Draw() const { DrawRectangleRec(Rectangle{position.x - 10.0f, position.y - 10.0f, 20.0f, 20.0f}, BLUE); }

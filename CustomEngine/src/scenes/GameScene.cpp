@@ -6,7 +6,7 @@
 
 void GameScene::Init() {
   // inizializzare mappa
-
+  map.Load("maps/map.json");
   //  inizializzare entity manager
   entityManager.AddEntity(std::make_unique<Player>(
       Vector2{config::SCREENWIDTH / 2.0f, config::SCREENHEIGHT / 2.0f},
@@ -21,7 +21,7 @@ void GameScene::Init() {
   camera.target = player->GetPosition();
   camera.offset = {config::SCREENWIDTH / 2.0f, config::SCREENHEIGHT / 2.0f};
   camera.rotation = 0.0f;
-  camera.zoom = 1.0f;
+  camera.zoom = 2.0f;
 }
 
 void GameScene::Update(float dt) {
@@ -30,7 +30,9 @@ void GameScene::Update(float dt) {
 }
 
 void GameScene::Draw() const {
+  DrawFPS(10, 10);
   BeginMode2D(camera);
+  map.Draw();
   entityManager.DrawAll();
   EndMode2D();
 }
