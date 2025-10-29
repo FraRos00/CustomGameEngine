@@ -21,7 +21,7 @@ void GameScene::Init() {
   camera.target = player->GetPosition();
   camera.offset = {config::SCREENWIDTH / 2.0f, config::SCREENHEIGHT / 2.0f};
   camera.rotation = 0.0f;
-  camera.zoom = 2.0f;
+  camera.zoom = 1.0f;
 }
 
 void GameScene::Update(float dt) {
