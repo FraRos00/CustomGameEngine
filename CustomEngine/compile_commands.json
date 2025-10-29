@@ -1,0 +1,98 @@
+[
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-std=c++17",
+      "-Wall",
+      "-Wextra",
+      "-Iinclude",
+      "-c",
+      "-o",
+      "build/entities/Player.o",
+      "src/entities/Player.cpp"
+    ],
+    "directory": "/home/francesco/Documents/personal/coding/raylib/CustomEngine",
+    "file": "/home/francesco/Documents/personal/coding/raylib/CustomEngine/src/entities/Player.cpp",
+    "output": "/home/francesco/Documents/personal/coding/raylib/CustomEngine/build/entities/Player.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-std=c++17",
+      "-Wall",
+      "-Wextra",
+      "-Iinclude",
+      "-c",
+      "-o",
+      "build/core/InputManager.o",
+      "src/core/InputManager.cpp"
+    ],
+    "directory": "/home/francesco/Documents/personal/coding/raylib/CustomEngine",
+    "file": "/home/francesco/Documents/personal/coding/raylib/CustomEngine/src/core/InputManager.cpp",
+    "output": "/home/francesco/Documents/personal/coding/raylib/CustomEngine/build/core/InputManager.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-std=c++17",
+      "-Wall",
+      "-Wextra",
+      "-Iinclude",
+      "-c",
+      "-o",
+      "build/core/Game.o",
+      "src/core/Game.cpp"
+    ],
+    "directory": "/home/francesco/Documents/personal/coding/raylib/CustomEngine",
+    "file": "/home/francesco/Documents/personal/coding/raylib/CustomEngine/src/core/Game.cpp",
+    "output": "/home/francesco/Documents/personal/coding/raylib/CustomEngine/build/core/Game.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-std=c++17",
+      "-Wall",
+      "-Wextra",
+      "-Iinclude",
+      "-c",
+      "-o",
+      "build/globals/globals.o",
+      "src/globals/globals.cpp"
+    ],
+    "directory": "/home/francesco/Documents/personal/coding/raylib/CustomEngine",
+    "file": "/home/francesco/Documents/personal/coding/raylib/CustomEngine/src/globals/globals.cpp",
+    "output": "/home/francesco/Documents/personal/coding/raylib/CustomEngine/build/globals/globals.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-std=c++17",
+      "-Wall",
+      "-Wextra",
+      "-Iinclude",
+      "-c",
+      "-o",
+      "build/utils/Map.o",
+      "src/utils/Map.cpp"
+    ],
+    "directory": "/home/francesco/Documents/personal/coding/raylib/CustomEngine",
+    "file": "/home/francesco/Documents/personal/coding/raylib/CustomEngine/src/utils/Map.cpp",
+    "output": "/home/francesco/Documents/personal/coding/raylib/CustomEngine/build/utils/Map.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-std=c++17",
+      "-Wall",
+      "-Wextra",
+      "-Iinclude",
+      "-c",
+      "-o",
+      "build/game.o",
+      "src/game.cpp"
+    ],
+    "directory": "/home/francesco/Documents/personal/coding/raylib/CustomEngine",
+    "file": "/home/francesco/Documents/personal/coding/raylib/CustomEngine/src/game.cpp",
+    "output": "/home/francesco/Documents/personal/coding/raylib/CustomEngine/build/game.o"
+  }
+]
