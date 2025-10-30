@@ -4,17 +4,20 @@
 #include <memory>
 #include <string>
 #include <unordered_map>
+#include <vector>
 
 class SceneManager {
 
 public:
-  void Push(Scene *scene);
+  void Register(Scene *scene);
+  void Push(std::string name);
   void Pop();
   void Switch(std::string name);
   void Update(float dt);
   void Draw() const;
+  std::string GetCurrentSceneName()const;
 
 private:
   std::unordered_map<std::string, std::unique_ptr<Scene>> scenes;
-  Scene *currentScene = nullptr;
+  std::vector<Scene*> sceneStack;
 };

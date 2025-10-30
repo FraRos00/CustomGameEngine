@@ -13,8 +13,7 @@ public:
   void Update(float dt) override;
   void Draw() const override;
   void HandleInputs() override {};
-  std::string GetName() const { return name; };
-
+  
   ~GameScene() override = default;
 
 private:
