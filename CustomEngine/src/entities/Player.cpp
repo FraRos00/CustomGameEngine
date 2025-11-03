@@ -22,7 +22,7 @@ Player::Player(Vector2 position, float velocity, bool isActive): Entity(position
     );
 
     //Add Animations
-    animator.AddAnimation("IdleFront",Animation("character/sSwordsman_lvl3_Idle_with_shadow.png",0,0,64,64,2,12,8.0f,true));
+    animator.AddAnimation("IdleFront",Animation("character/Swordsman_lvl3_Idle_with_shadow.png",0,0,64,64,2,12,8.0f,true));
     animator.AddAnimation("IdleLeft",Animation("character/Swordsman_lvl3_Idle_with_shadow.png",0,64,64,64,2,12,8.0f,true));
     animator.AddAnimation("IdleRight",Animation("character/Swordsman_lvl3_Idle_with_shadow.png",0,128,64,64,2,12,8.0f,true));
     animator.AddAnimation("IdleBack",Animation("character/Swordsman_lvl3_Idle_with_shadow.png",0,192,64,64,2,4,8.0f,true));
@@ -33,6 +33,10 @@ Player::Player(Vector2 position, float velocity, bool isActive): Entity(position
     animator.AddAnimation("RunBack",Animation("character/Swordsman_lvl3_Run_with_shadow.png",0,192,64,64,2,8,8.0f,true));
 
     animator.Play("IdleFront");
+
+    //hitbox TO FIX, devo scalarla
+    hitbox.width = 64.0f;
+    hitbox.height = 64.0f;
   }
 
 void Player::Update(float dt) {

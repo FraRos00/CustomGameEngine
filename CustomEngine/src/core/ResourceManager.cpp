@@ -1,5 +1,6 @@
 #include "core/ResourceManager.hpp"
 #include <raylib.h>
+#include <iostream>
 
 ResourceManager &ResourceManager::GetInstance() {
   static ResourceManager instance;
@@ -11,9 +12,11 @@ void ResourceManager::LoadTextureFromPath(std::string path) {
   auto it = textures.find(path);
   if (it != textures.end()) {
     it->second.refCount++;
+    std::cout<<"Resource "<<path<<" already present. Incrementing refcount...\n";
     return;
   }
   TextureResource texture;
+  std::cout<<"Loading Resource "<<path<<"...\n";
   texture.texture = LoadTexture(path.c_str());
   texture.refCount = 1;
   if (texture.texture.id != 0) {
@@ -26,7 +29,9 @@ void ResourceManager::UnloadTextureFromPath(std::string path) {
   if (it == textures.end())
     return;
   it->second.refCount--;
+  std::cout<<"Reducing refcount for Resource "<<path<<"...\n";
   if (it->second.refCount <= 0) {
+  std::cout<<"Unloading Resource "<<path<<"...\n";
     UnloadTexture(it->second.texture);
     textures.erase(it);
   }
@@ -41,6 +46,7 @@ Texture2D *ResourceManager::GetTexture(std::string path) {
 }
 
 void ResourceManager::UnloadAll() {
+  std::cout<<"Unloading All Resources...\n";
   for (auto &[_, textureRes] : textures) {
     UnloadTexture(textureRes.texture);
   }
