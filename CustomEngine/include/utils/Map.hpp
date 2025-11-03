@@ -27,6 +27,7 @@ public:
 
 private:
   json mapData;
+  std::string fullPath;
   Texture2D *tileset = nullptr;
   int tileWidth = 0, tileHeight = 0;
   int mapWidth = 0, mapHeight = 0;

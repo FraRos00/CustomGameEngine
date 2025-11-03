@@ -3,11 +3,18 @@
 #include <raylib.h>
 #include <string>
 #include <unordered_map>
+
+struct TextureResource {
+  Texture2D texture;
+  int refCount;
+};
+
 class ResourceManager {
 
 public:
   static ResourceManager &GetInstance();
   void LoadTextureFromPath(std::string path);
+  void UnloadTextureFromPath(std::string path);
   Texture2D *GetTexture(std::string path);
   void LoadFont(std::string path);
   void GetFont(std::string id);
@@ -22,7 +29,7 @@ private:
   ResourceManager(const ResourceManager &) = delete;
   ResourceManager &operator=(const ResourceManager &) = delete;
 
-  std::unordered_map<std::string, Texture2D> textures;
+  std::unordered_map<std::string, TextureResource> textures;
   std::unordered_map<std::string, Font> fonts;
   std::unordered_map<std::string, Sound> sounds;
 };

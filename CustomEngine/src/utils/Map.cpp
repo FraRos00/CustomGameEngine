@@ -19,7 +19,7 @@ bool Map::Load(const std::string &jsonPath) {
 
   // Carica tileset
   std::string imagePath = mapData["tilesets"][0]["image"];
-  std::string fullPath = "maps/" + imagePath;
+  fullPath = "maps/" + imagePath;
   ResourceManager::GetInstance().LoadTextureFromPath(fullPath);
   tileset = ResourceManager::GetInstance().GetTexture(fullPath);
   if (!tileset) {
@@ -36,6 +36,7 @@ bool Map::Load(const std::string &jsonPath) {
 }
 
 void Map::Unload() {
+  ResourceManager::GetInstance().UnloadTextureFromPath(fullPath);
   tileset = nullptr;
   collisions.clear();
   tileCollisionMap.clear();
