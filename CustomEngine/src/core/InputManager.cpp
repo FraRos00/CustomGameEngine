@@ -1,7 +1,7 @@
 #include "core/InputManager.hpp"
 #include "globals/globals.hpp"
 #include <raylib.h>
-#include <iostream>
+
 InputManager &InputManager::GetInstance() {
   static InputManager instance;
   return instance;
@@ -34,38 +34,22 @@ InputManager::InputManager() {
 
 
 int InputManager::SubscribeListener(Action action, InputEventType eventType, std::function<void()> callback) {
-  ListenerCallback lcb;
-  lcb.action = action;
-  lcb.eventType = eventType;
-  lcb.listenerId = listenerId++;
-  lcb.callback=callback;
-  listeners[action][eventType].push_back(lcb);
+  
+  listeners[action][eventType].emplace_back(ListenerCallback{listenerId++, callback});
+  return listenerId;
 
-  std::cout << "=== LISTENERS DEBUG ===\n";
-  for (auto &[action, typeMap] : listeners) {
-    std::cout << "Action " << static_cast<int>(action)
-              << " -> " << typeMap.size() << " event types\n";
-
-    for (auto &[eventType, vec] : typeMap) {
-        std::cout << "   EventType " << static_cast<int>(eventType)
-                  << " -> " << vec.size() << " callbacks\n";
-    }
-  }
-  std::cout << "=======================\n";
-
-
-
-  return lcb.listenerId;
 }
 
 void InputManager::UnsubscribeListener(int id){
-for(auto &[_,listenersMap] : listeners){
-  for(auto &[_,lcbv]:listenersMap){
-  global::unordered_removeif(lcbv, [id](ListenerCallback &lcb){
-    return lcb.listenerId == id;
-  });
+
+  for(auto &[_,listenersMap] : listeners){
+    for(auto &[_,lcbv]:listenersMap){
+    global::unordered_removeif(lcbv, [id](ListenerCallback &lcb){
+      return lcb.listenerId == id;
+    });
+    }
   }
-}
+
 }
 
 void InputManager::Update() {
@@ -96,9 +80,7 @@ void InputManager::Dispatch(Action action, InputEventType type) {
 
     auto itType = itAction->second.find(type);
     if (itType == itAction->second.end()) return;
-        std::cout<<"Type: "<<static_cast<int>(action)<<"\n";
     for (auto &lcb : itType->second){
-      std::cout<<"DEBUG\n";
       lcb.callback();
     }
 }

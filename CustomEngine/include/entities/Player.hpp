@@ -1,9 +1,15 @@
 #pragma once
 
-#include "Entity.hpp"
-#include "utils/InputSubscription.hpp"
 #include <raylib.h>
 #include <vector>
+#include "Entity.hpp"
+#include "utils/InputSubscription.hpp"
+#include "animations/Animator.hpp"
+
+struct Hitbox{
+  float width;
+  float height;
+};
 
 class Player : public Entity {
 public:
@@ -19,7 +25,9 @@ public:
   ~Player() = default;
 
 private:
-  Rectangle hitbox;
+  Hitbox hitbox;
   Vector2 dir = {0.0f, 0.0f};
   std::vector<InputSubscription> inputSubscriptions;
+  Animator animator;
+  
 };

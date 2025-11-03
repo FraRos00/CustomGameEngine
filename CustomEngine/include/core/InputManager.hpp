@@ -37,10 +37,8 @@ struct InputState {
 };
 
 struct ListenerCallback{
-  std::function<void()> callback;
-  Action action;
-  InputEventType eventType;
   int listenerId;
+  std::function<void()> callback;
 };
 
 class InputManager {
