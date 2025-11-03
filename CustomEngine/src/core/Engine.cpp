@@ -22,21 +22,24 @@ void Engine::Init() {
   sceneManager.Register(pauseScene);
   
   sceneManager.Push("GameScene");
+
+  InputManager::GetInstance().PushContext(InputContext::GameContext);
 }
 
 void Engine::Run() {
+  InputManager &inputManager = InputManager::GetInstance();
   isRunning = true;
   float dt;
   while (isRunning && !WindowShouldClose()) {
     dt = GetFrameTime();
 
-    if(inputManager.IsPressed(Action::Pause)) {
+    /* if(inputManager.IsPressed(Action::Pause)) {
       if(sceneManager.GetCurrentSceneName() == "GameScene") {
         sceneManager.Push("PauseScene");
       } else {
         sceneManager.Pop();
       }
-    }
+    } */
 
     inputManager.Update();
     // update fisica
@@ -45,6 +48,7 @@ void Engine::Run() {
     BeginDrawing();
     ClearBackground(RAYWHITE);
     sceneManager.Draw();
+    DrawFPS(10, 10);
     EndDrawing();
   }
 

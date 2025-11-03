@@ -1,14 +1,13 @@
 #pragma once
 
 #include "Entity.hpp"
+#include "utils/InputSubscription.hpp"
 #include <raylib.h>
+#include <vector>
 
 class Player : public Entity {
 public:
-  Player(Vector2 position, float velocity, bool isActive = true)
-      : Entity(position, velocity, isActive) {
-    hitbox = {position.x - 10.0f, position.y - 10.0f, 20.0f, 20.0f};
-  };
+  Player(Vector2 position, float velocity, bool isActive = true);
 
   // PUBLIC METHODS
   void Update(float dt) override;
@@ -22,4 +21,5 @@ public:
 private:
   Rectangle hitbox;
   Vector2 dir = {0.0f, 0.0f};
+  std::vector<InputSubscription> inputSubscriptions;
 };

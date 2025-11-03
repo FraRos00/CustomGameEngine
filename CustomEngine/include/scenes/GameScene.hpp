@@ -3,6 +3,7 @@
 #include "entities/EntityManager.hpp"
 #include "entities/Player.hpp"
 #include "utils/Map.hpp"
+#include "utils/Camera.hpp"
 #include <raylib.h>
 
 class GameScene : public Scene {
@@ -19,7 +20,6 @@ public:
 private:
   EntityManager entityManager;
   Map map;
-  Camera2D camera;
-
+  GameCamera camera;
   Player *player = nullptr;
 };

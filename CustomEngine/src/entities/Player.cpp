@@ -1,22 +1,33 @@
 #include "entities/Player.hpp"
 #include "core/InputManager.hpp"
 #include <cmath>
+#include <iostream>
+
+Player::Player(Vector2 position, float velocity, bool isActive): Entity(position, velocity, isActive) {
+    hitbox = {position.x - 10.0f, position.y - 10.0f, 20.0f, 20.0f};
+    InputManager &input = InputManager::GetInstance();
+
+  
+    inputSubscriptions.emplace_back( 
+      input.SubscribeListener(Action::MoveRight, InputEventType::Held, [this](){dir.x+=1;})
+    );
+
+    inputSubscriptions.emplace_back( 
+      input.SubscribeListener(Action::MoveUp, InputEventType::Held, [this](){dir.y-=1;})
+    );
+    
+    inputSubscriptions.emplace_back( 
+      input.SubscribeListener(Action::MoveDown, InputEventType::Held, [this](){dir.y+=1;})
+    );
+      inputSubscriptions.emplace_back( 
+      input.SubscribeListener(Action::MoveLeft, InputEventType::Held, [this](){dir.x-=1;})
+    );
+
+
+  }
 
 void Player::Update(float dt) {
-  InputManager &input = InputManager::GetInstance();
 
-  if (input.IsHeld(Action::MoveLeft)) {
-    dir.x -= 1;
-  }
-  if (input.IsHeld(Action::MoveRight)) {
-    dir.x += 1;
-  }
-  if (input.IsHeld(Action::MoveUp)) {
-    dir.y -= 1;
-  }
-  if (input.IsHeld(Action::MoveDown)) {
-    dir.y += 1;
-  }
   if (dir.x != 0 || dir.y != 0) {
     float v_2 = sqrt(dir.x * dir.x + dir.y * dir.y);
     dir.x /= v_2;

@@ -2,7 +2,6 @@
 #include "entities/Player.hpp"
 #include "globals/config.hpp"
 #include <raylib.h>
-#include <raymath.h>
 
 void GameScene::Init() {
   // inizializzare mappa
@@ -18,20 +17,17 @@ void GameScene::Init() {
     this->player = player;
   else
     throw std::runtime_error("Player entity not found in GameScene Init");
-  camera.target = player->GetPosition();
-  camera.offset = {config::SCREENWIDTH / 2.0f, config::SCREENHEIGHT / 2.0f};
-  camera.rotation = 0.0f;
-  camera.zoom = 2.0f;
+  camera.SetTarget(player->GetPosition());
 }
 
 void GameScene::Update(float dt) {
   entityManager.UpdateAll(dt);
-  camera.target = Vector2Lerp(camera.target, player->GetPosition(), 0.1f);
+  camera.Update(player->GetPosition());
 }
 
 void GameScene::Draw() const {
   DrawFPS(10, 10);
-  BeginMode2D(camera);
+  BeginMode2D(camera.GetCamera());
   map.Draw();
   entityManager.DrawAll();
   EndMode2D();

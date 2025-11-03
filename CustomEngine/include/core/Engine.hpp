@@ -13,7 +13,6 @@ public:
 private:
   SceneManager sceneManager;
   PhysicsManager physicsManager;
-  InputManager &inputManager = InputManager::GetInstance();
   ResourceManager &resourceManager = ResourceManager::GetInstance();
 
   bool isRunning = false;
