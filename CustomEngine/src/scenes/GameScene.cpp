@@ -45,6 +45,7 @@ void GameScene::Init() {
 
 void GameScene::Update(float dt) {
   entityManager.UpdateAll(dt);
+  entityManager.HandleMapCollisions(map);
   camera.Update(player->GetPosition());
   uiManager.Update(dt);
 }

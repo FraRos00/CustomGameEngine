@@ -1,14 +1,15 @@
 #pragma once
-#include "entities/Entity.hpp"
 #include <memory>
 #include <vector>
+#include "entities/Entity.hpp"
+#include "utils/Map.hpp"
 
 class EntityManager {
 public:
   void AddEntity(std::unique_ptr<Entity> entity);
   void UpdateAll(float dt);
   void DrawAll() const;
-  void HandleCollisions();
+  void HandleMapCollisions(Map &map);
   void Clear();
 
   template <typename T> T *GetEntityOfType() {

@@ -6,10 +6,7 @@
 #include "utils/InputSubscription.hpp"
 #include "animations/Animator.hpp"
 
-struct Hitbox{
-  float width;
-  float height;
-};
+
 
 class Player : public Entity {
 public:
@@ -20,12 +17,10 @@ public:
   void Draw() const override;
   void OnCollision(Entity &other) override {};
 
-  Vector2 GetPosition() const { return position; }
-
   ~Player() = default;
 
 private:
-  Hitbox hitbox;
+  void ChooseMoveAnimation(Vector2 dir);
   Vector2 dir = {0.0f, 0.0f};
   std::vector<InputSubscription> inputSubscriptions;
   Animator animator;

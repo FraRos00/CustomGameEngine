@@ -1,10 +1,10 @@
 #pragma once
-#include "entities/Entity.hpp"
+#include "entities/EntityManager.hpp"
 #include "utils/Map.hpp"
 
 class PhysicsManager {
 public:
-  void ApplyPhysics(Entity &entity, float dt, Map &map);
+  void CheckCollisions(EntityManager &entity, Map &map);
 
 private:
   float gravity;

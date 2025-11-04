@@ -1,6 +1,6 @@
 #include "utils/Map.hpp"
 #include "core/ResourceManager.hpp"
-#include "globals/config.hpp"
+#include "globals/globals.hpp"
 #include <fstream>
 #include <string>
 
@@ -124,7 +124,7 @@ void Map::Draw() const {
       }
     }
   }
-  if (config::DEBUG)
+  if (global::DEBUG)
     for (auto &c : collisions) {
       DrawRectangleLines(c.rect.x, c.rect.y, c.rect.width, c.rect.height, RED);
     }
@@ -158,7 +158,7 @@ void Map::Draw(std::string toDrawlayer) const {
     }
   }
 
-  if (config::DEBUG)
+  if (global::DEBUG)
     for (auto &c : collisions) {
       DrawRectangleLines(c.rect.x, c.rect.y, c.rect.width, c.rect.height, RED);
     }

@@ -2,10 +2,11 @@
 #include <raylib.h>
 #include "core/Scene.hpp"
 #include "entities/EntityManager.hpp"
-#include "entities/Player.hpp"
+#include "core/PhysicsManager.hpp"
+#include "ui/UiManager.hpp"
 #include "utils/Map.hpp"
 #include "utils/Camera.hpp"
-#include "ui/UiManager.hpp"
+#include "entities/Player.hpp"
 
 
 class GameScene : public Scene {
@@ -20,6 +21,7 @@ public:
 
 private:
   EntityManager entityManager;
+  PhysicsManager physicsManager;
   UiManager uiManager;
   Map map;
   GameCamera camera;

@@ -5,13 +5,13 @@
 
 class Animator{
     public:
-    void AddAnimation(const std::string &name,const Animation& animation);
-    void Play(const std::string &name, bool forceRestart=false);
-    void Update(float dt);
-    void Draw(Vector2 position, Color tint = WHITE)const;
-    
+        void AddAnimation(const std::string &name,const Animation& animation);
+        void Play(const std::string &name, bool forceRestart=false);
+        void Update(float dt);
+        void Draw(Vector2 position, Color tint = WHITE)const;
+        std::string GetCurrentAnimation()const{return currentName;}
     private:
-    std::unordered_map<std::string, Animation>animations;    
-    Animation* currentAnimation = nullptr;
-    std::string currentName;
+        std::unordered_map<std::string, Animation>animations;    
+        Animation* currentAnimation = nullptr;
+        std::string currentName;
 };

@@ -3,7 +3,6 @@
 #include "core/ResourceManager.hpp"
 #include "utils/InputSubscription.hpp"
 #include "core/SceneManager.hpp"
-#include "core/PhysicsManager.hpp"
 
 
 class Engine {
@@ -14,7 +13,6 @@ class Engine {
 
   private:
     SceneManager sceneManager;
-    PhysicsManager physicsManager;
     std::vector<InputSubscription> inputSubscriptions;
 
 

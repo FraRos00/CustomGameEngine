@@ -4,6 +4,7 @@
 #include <functional>
 
 enum class Action { 
+  ToggleDebugMode,
   MoveLeft,
   MoveRight,
   MoveUp,

@@ -5,10 +5,11 @@ void Animator::AddAnimation(const std::string &name,const Animation& animation){
 }
 
 void Animator::Play(const std::string &name, bool forceRestart){
+    if(currentName == name && !forceRestart) return;
+    
     auto it = animations.find(name);
     if(it==animations.end()) return;
 
-    if(currentName == name && !forceRestart) return;
     currentName = name;
     currentAnimation = &it->second;
     currentAnimation->Reset();

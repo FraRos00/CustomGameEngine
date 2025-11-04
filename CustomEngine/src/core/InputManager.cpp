@@ -8,6 +8,7 @@ InputManager &InputManager::GetInstance() {
 }
 
 InputManager::InputManager() {
+  bindings[InputContext::GameContext][Action::ToggleDebugMode] = KEY_ENTER;
   bindings[InputContext::GameContext][Action::MoveRight] = KEY_D;
   bindings[InputContext::GameContext][Action::MoveLeft] = KEY_A;
   bindings[InputContext::GameContext][Action::MoveUp] = KEY_W;

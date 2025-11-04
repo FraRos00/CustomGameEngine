@@ -2,6 +2,7 @@
 #include "scenes/GameScene.hpp"
 #include "scenes/PauseScene.hpp"
 #include "globals/config.hpp"
+#include "globals/globals.hpp"
 #include <ctime>
 #include <iostream>
 #include <raylib.h>
@@ -30,7 +31,12 @@ void Engine::Init() {
   input.PushContext(InputContext::GameContext);
 
   //register inputs listeners
-  
+  inputSubscriptions.emplace_back(
+    input.SubscribeListener(
+      Action::ToggleDebugMode, InputEventType::Pressed,
+       [](){global::DEBUG = !global::DEBUG;}
+      )
+  );
 
 }
 
