@@ -1,6 +1,31 @@
 #include "core/SceneManager.hpp"
 #include <iostream>
 
+SceneManager::SceneManager(){
+InputManager &input = InputManager::GetInstance();
+
+inputSubscriptions.emplace_back(
+    input.SubscribeListener(
+    Action::Pause, InputEventType::Pressed,
+    [&input, this](){
+      input.PushContext(InputContext::PauseContext);
+      this->Push("PauseScene");
+    }
+  )
+  );
+
+  inputSubscriptions.emplace_back(
+    input.SubscribeListener(
+      Action::UnPause, InputEventType::Pressed,
+      [&input, this](){
+        input.PopContext();
+        this->Pop();
+      }
+    )
+  );
+}
+
+
 void SceneManager::Register(Scene *scene) {
   if (!scene)
     return;

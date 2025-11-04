@@ -11,6 +11,7 @@ enum class Action {
   Jump,
   Attack,
   Pause,
+  UnPause,
   OpenInventory,
   CloseInventory,
   InventoryUp,
@@ -21,7 +22,8 @@ enum class Action {
 
 enum class InputContext{
   GameContext,
-  InventoryContext
+  InventoryContext,
+  PauseContext
 };
 
 enum class InputEventType {

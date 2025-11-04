@@ -16,6 +16,7 @@ InputManager::InputManager() {
   bindings[InputContext::GameContext][Action::Pause] = KEY_ESCAPE;
   bindings[InputContext::GameContext][Action::OpenInventory] = KEY_I;
   bindings[InputContext::InventoryContext][Action::CloseInventory] = KEY_I;
+  bindings[InputContext::PauseContext][Action::UnPause] = KEY_ESCAPE;
 }
 
   void InputManager::SwitchContext(InputContext inputContext){
@@ -53,7 +54,10 @@ void InputManager::UnsubscribeListener(int id){
 }
 
 void InputManager::Update() {
-  for(const auto &context: contextStack){
+  //for(const auto &context: contextStack)
+  if(contextStack.empty()) return;
+  const InputContext &context = contextStack.back(); //se modifico contextstack si invalida il riferimento
+
   for (auto &[action, key] : bindings[context]) {
     InputState &state = states[action];
     state.isPressed = IsKeyPressed(key);
@@ -68,9 +72,8 @@ void InputManager::Update() {
     if (state.isHeld)     Dispatch(action, InputEventType::Held);
     if (state.isReleased) Dispatch(action, InputEventType::Released);
 
-
   }
-}
+
 }
 
 void InputManager::Dispatch(Action action, InputEventType type) {

@@ -12,6 +12,9 @@ void Engine::Init() {
   SetRandomSeed(time(nullptr));
   SetExitKey(KEY_NULL);
  
+  InputManager &input = InputManager::GetInstance();
+
+  // create game scenes
   auto *gameScene = new GameScene();
   auto *pauseScene = new PauseScene();
 
@@ -21,9 +24,14 @@ void Engine::Init() {
   sceneManager.Register(gameScene);
   sceneManager.Register(pauseScene);
   
+  // activate the game scene and push the input game context
   sceneManager.Push("GameScene");
 
-  InputManager::GetInstance().PushContext(InputContext::GameContext);
+  input.PushContext(InputContext::GameContext);
+
+  //register inputs listeners
+  
+
 }
 
 void Engine::Run() {
@@ -32,14 +40,6 @@ void Engine::Run() {
   float dt;
   while (isRunning && !WindowShouldClose()) {
     dt = GetFrameTime();
-
-    /* if(inputManager.IsPressed(Action::Pause)) {
-      if(sceneManager.GetCurrentSceneName() == "GameScene") {
-        sceneManager.Push("PauseScene");
-      } else {
-        sceneManager.Pop();
-      }
-    } */
 
     inputManager.Update();
     // update fisica
@@ -56,6 +56,6 @@ void Engine::Run() {
 }
 
 void Engine::Shutdown() {
-  resourceManager.UnloadAll();
+  ResourceManager::GetInstance().UnloadAll();
   CloseWindow();
 }
