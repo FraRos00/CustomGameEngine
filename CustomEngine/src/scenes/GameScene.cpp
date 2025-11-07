@@ -3,17 +3,18 @@
 #include "entities/Player.hpp"
 #include "globals/config.hpp"
 #include "ui/elements/InventoryUi.hpp"
+#include <iostream>
 
 
 void GameScene::Init() {
   InputManager &input = InputManager::GetInstance();
 
-  // inizializzare mappa
-  map.Load("maps/map.json");
+  // inizializzare mappe in ordine inverso
+  LoadMap("map");
 
   //  inizializzare player entity
   entityManager.AddEntity(std::make_unique<Player>(
-      Vector2{config::SCREENWIDTH / 2.0f, config::SCREENHEIGHT / 2.0f},
+      currentMap->ParseSpawnPoint(),
       200.0f));
 
   auto *player = entityManager.GetEntityOfType<Player>();
@@ -24,6 +25,7 @@ void GameScene::Init() {
 
   //  inizializzare camera
   camera.SetTarget(player->GetPosition());
+  camera.SetBounds(currentMap->GetWidth(),currentMap->GetHeight());
 
   // inizializzare ui elements
   InventoryUi* invPtr = uiManager.CreateElement<InventoryUi>();
@@ -43,9 +45,28 @@ void GameScene::Init() {
 
 }
 
+void GameScene::LoadMap(std::string mapName){
+  auto it = loadedMaps.find(mapName);
+  if(it!=loadedMaps.end()){
+    currentMap = it->second.get();
+    std::cout << "GameScene: switched to cached map " << mapName << "\n";
+    return;
+  }
+  auto newMap = std::make_unique<Map>();
+  std::string path = "maps/"+mapName+".json";
+
+  if(!newMap->Load(path)) return;
+
+  currentMap = newMap.get();
+  loadedMaps[mapName] = std::move(newMap);
+
+  std::cout << "GameScene: loaded and set map " << mapName << "\n";
+
+}
+
 void GameScene::Update(float dt) {
   entityManager.UpdateAll(dt);
-  entityManager.HandleMapCollisions(map);
+  entityManager.HandleMapCollisions(*currentMap);
   camera.Update(player->GetPosition());
   uiManager.Update(dt);
 }
@@ -54,7 +75,7 @@ void GameScene::Draw() const {
   //DrawFPS(10, 10);
   
   BeginMode2D(camera.GetCamera());
-  map.Draw();
+  currentMap->Draw();
   entityManager.DrawAll();
   EndMode2D();
 

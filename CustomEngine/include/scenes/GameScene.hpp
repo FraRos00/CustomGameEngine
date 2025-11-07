@@ -1,5 +1,8 @@
 #pragma once
 #include <raylib.h>
+#include <memory>
+#include <unordered_map>
+#include <string>
 #include "core/Scene.hpp"
 #include "entities/EntityManager.hpp"
 #include "core/PhysicsManager.hpp"
@@ -16,6 +19,7 @@ public:
   void Init() override;
   void Update(float dt) override;
   void Draw() const override;
+  void LoadMap(std::string mapName);
   
   ~GameScene() override = default;
 
@@ -23,7 +27,8 @@ private:
   EntityManager entityManager;
   PhysicsManager physicsManager;
   UiManager uiManager;
-  Map map;
+  Map *currentMap;
+  std::unordered_map<std::string, std::unique_ptr<Map>> loadedMaps;
   GameCamera camera;
   Player *player = nullptr;
 

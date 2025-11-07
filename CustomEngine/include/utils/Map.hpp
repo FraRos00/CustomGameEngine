@@ -16,14 +16,15 @@ public:
   Map() = default;
   ~Map() { Unload(); }
 
-  int getWidth() const { return mapWidth * tileWidth; };
-  int getHeight() const { return mapHeight * tileHeight; };
+  int GetWidth() const { return mapWidth * tileWidth; };
+  int GetHeight() const { return mapHeight * tileHeight; };
 
   bool Load(const std::string &jsonPath);
   void Unload();
   void Draw() const;
   void Draw(std::string layer) const;
   bool CheckCollision(const Rectangle &rect) const;
+  Vector2 ParseSpawnPoint();
 
 private:
   json mapData;

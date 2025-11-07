@@ -35,6 +35,19 @@ bool Map::Load(const std::string &jsonPath) {
   return true;
 }
 
+Vector2 Map::ParseSpawnPoint(){
+  for (auto &layer : mapData["layers"]) {
+        if (layer["type"] == "objectgroup" && layer["name"] == "spawn") {
+            for (auto &obj : layer["objects"]) {
+                if (obj["name"] == "player_spawn") {
+                    return Vector2{obj["x"], obj["y"]};
+                }
+            }
+        }
+    }
+    return Vector2{0,0};
+}
+
 void Map::Unload() {
   ResourceManager::GetInstance().UnloadTextureFromPath(fullPath);
   tileset = nullptr;
