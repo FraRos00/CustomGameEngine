@@ -18,13 +18,15 @@ enum class Action {
   InventoryUp,
   InventoryDown,
   InventoryLeft,
-  InventoryRight
+  InventoryRight,
+  TestTransition, // DEBUG to remove
 };
 
 enum class InputContext{
   GameContext,
   InventoryContext,
-  PauseContext
+  PauseContext,
+  TransitionContext, // DEBUG to remove
 };
 
 enum class InputEventType {

@@ -41,7 +41,12 @@ void GameScene::Init() {
   );
 
   // altri input
-  
+  inputSubscriptions.emplace_back(
+    input.SubscribeListener(
+      Action::TestTransition, InputEventType::Pressed,
+      transition
+    )
+  );
 
 }
 
@@ -72,7 +77,6 @@ void GameScene::Update(float dt) {
 }
 
 void GameScene::Draw() const {
-  //DrawFPS(10, 10);
   
   BeginMode2D(camera.GetCamera());
   currentMap->Draw();

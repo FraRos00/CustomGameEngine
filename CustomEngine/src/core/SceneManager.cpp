@@ -36,6 +36,7 @@ void SceneManager::Register(Scene *scene) {
 void SceneManager::Push(std::string name){
   auto it = scenes.find(name);
   if(it!=scenes.end()){
+    it->second->Init();
     sceneStack.push_back(it->second.get());
     std::cout << "SceneManager: pushed scene " << name << " onto the stack\n";
   }else{
@@ -44,6 +45,7 @@ void SceneManager::Push(std::string name){
 }
 
 void SceneManager::Pop() {
+  std::cout << "SceneManager: popped a scene from the stack\n";
   if (sceneStack.empty())
     return;
   sceneStack.pop_back();

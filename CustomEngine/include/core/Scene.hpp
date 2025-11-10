@@ -14,6 +14,8 @@ public:
   virtual void Update(float dt) = 0;
   virtual void Draw() const = 0;
 
+  virtual void Reset(){}
+
   std::string GetName() const { return name; }
 
 protected:

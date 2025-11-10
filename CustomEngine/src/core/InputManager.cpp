@@ -9,6 +9,7 @@ InputManager &InputManager::GetInstance() {
 
 InputManager::InputManager() {
   bindings[InputContext::GameContext][Action::ToggleDebugMode] = KEY_ENTER;
+  bindings[InputContext::GameContext][Action::TestTransition] = KEY_T;
   bindings[InputContext::GameContext][Action::MoveRight] = KEY_D;
   bindings[InputContext::GameContext][Action::MoveLeft] = KEY_A;
   bindings[InputContext::GameContext][Action::MoveUp] = KEY_W;
@@ -37,7 +38,7 @@ InputManager::InputManager() {
 
 int InputManager::SubscribeListener(Action action, InputEventType eventType, std::function<void()> callback) {
   
-  listeners[action][eventType].emplace_back(ListenerCallback{listenerId++, callback});
+  listeners[action][eventType].emplace_back(ListenerCallback{listenerId++, std::move(callback)});
   return listenerId;
 
 }

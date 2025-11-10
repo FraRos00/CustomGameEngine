@@ -1,6 +1,7 @@
 #include "core/Engine.hpp"
 #include "scenes/GameScene.hpp"
 #include "scenes/PauseScene.hpp"
+#include "scenes/TransitionScene.hpp"
 #include "globals/config.hpp"
 #include "globals/globals.hpp"
 #include <ctime>
@@ -11,23 +12,29 @@ void Engine::Init() {
   InitWindow(config::SCREENWIDTH, config::SCREENHEIGHT, "Custom Engine");
   SetTargetFPS(60);
   SetRandomSeed(time(nullptr));
-  SetExitKey(KEY_NULL);
+  SetExitKey(KEY_Q);
  
   InputManager &input = InputManager::GetInstance();
 
   // create game scenes
-  auto *gameScene = new GameScene();
+  auto *gameScene = new GameScene([&input, this](){
+    input.PushContext(InputContext::TransitionContext);
+    this->sceneManager.Push("TransitionScene");
+  });
+
   auto *pauseScene = new PauseScene();
 
-  gameScene->Init();
-  pauseScene->Init();
+  auto *transitionScene = new TransitionScene([&input, this](){
+    input.PopContext();
+    this->sceneManager.Pop();
+  });
 
   sceneManager.Register(gameScene);
   sceneManager.Register(pauseScene);
+  sceneManager.Register(transitionScene);
   
   // activate the game scene and push the input game context
   sceneManager.Push("GameScene");
-
   input.PushContext(InputContext::GameContext);
 
   //register inputs listeners

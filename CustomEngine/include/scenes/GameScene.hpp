@@ -3,6 +3,8 @@
 #include <memory>
 #include <unordered_map>
 #include <string>
+#include <functional>
+#include <utility>
 #include "core/Scene.hpp"
 #include "entities/EntityManager.hpp"
 #include "core/PhysicsManager.hpp"
@@ -14,7 +16,14 @@
 
 class GameScene : public Scene {
 public:
-  GameScene() : Scene("GameScene"){};
+  //forward serve a fare perfect forwarding ovvero trattare un rvalue e un lvalue come tali e distinguerli quando vengono passati
+  // universal reference && rappresenta potenzialmente sia un rvalue sia un lvalue ed e' condizione necessaria per fare forwarding
+  template<typename F>
+  GameScene(F&& transition) 
+  : Scene("GameScene"), transition(std::forward<F>(transition)){};
+
+  // GameScene() 
+  //: Scene("GameScene"){}
 
   void Init() override;
   void Update(float dt) override;
@@ -31,5 +40,5 @@ private:
   std::unordered_map<std::string, std::unique_ptr<Map>> loadedMaps;
   GameCamera camera;
   Player *player = nullptr;
-
+  std::function<void()> transition;
 };
