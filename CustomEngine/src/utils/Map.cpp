@@ -32,20 +32,24 @@ bool Map::Load(const std::string &jsonPath) {
   // Costruisci i rettangoli di collisione nel mondo
   BuildMapCollisions();
 
+  // Trova il punto di spawn del giocatore
+  ParseSpawnPoint();
+
   return true;
 }
 
-Vector2 Map::ParseSpawnPoint(){
+void Map::ParseSpawnPoint() {
   for (auto &layer : mapData["layers"]) {
-        if (layer["type"] == "objectgroup" && layer["name"] == "spawn") {
-            for (auto &obj : layer["objects"]) {
-                if (obj["name"] == "player_spawn") {
-                    return Vector2{obj["x"], obj["y"]};
-                }
-            }
+    if (layer["type"] == "objectgroup" && layer["name"] == "spawn") {
+      for (auto &obj : layer["objects"]) {
+        if (obj["name"] == "player_spawn") {
+          spawnPoint = {obj["x"], obj["y"]};
+          return;
         }
+      }
     }
-    return Vector2{0,0};
+  }
+  spawnPoint = {0, 0};
 }
 
 void Map::Unload() {
