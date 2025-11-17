@@ -1,30 +1,31 @@
 #include "core/Engine.hpp"
+#include "globals/config.hpp"
+#include "globals/globals.hpp"
 #include "scenes/GameScene.hpp"
 #include "scenes/PauseScene.hpp"
 #include "scenes/TransitionScene.hpp"
-#include "globals/config.hpp"
-#include "globals/globals.hpp"
 #include <ctime>
 #include <iostream>
 #include <raylib.h>
 
 void Engine::Init() {
+  // fix scaling problems on wayland
   InitWindow(config::SCREENWIDTH, config::SCREENHEIGHT, "Custom Engine");
   SetTargetFPS(60);
   SetRandomSeed(time(nullptr));
   SetExitKey(KEY_Q);
- 
+
   InputManager &input = InputManager::GetInstance();
 
   // create game scenes
-  auto *gameScene = new GameScene([&input, this](){
+  auto *gameScene = new GameScene([&input, this]() {
     input.PushContext(InputContext::TransitionContext);
     this->sceneManager.Push("TransitionScene");
   });
 
   auto *pauseScene = new PauseScene();
 
-  auto *transitionScene = new TransitionScene([&input, this](){
+  auto *transitionScene = new TransitionScene([&input, this]() {
     input.PopContext();
     this->sceneManager.Pop();
   });
@@ -32,19 +33,15 @@ void Engine::Init() {
   sceneManager.Register(gameScene);
   sceneManager.Register(pauseScene);
   sceneManager.Register(transitionScene);
-  
+
   // activate the game scene and push the input game context
   sceneManager.Push("GameScene");
   input.PushContext(InputContext::GameContext);
 
-  //register inputs listeners
+  // register inputs listeners
   inputSubscriptions.emplace_back(
-    input.SubscribeListener(
-      Action::ToggleDebugMode, InputEventType::Pressed,
-       [](){global::DEBUG = !global::DEBUG;}
-      )
-  );
-
+      input.SubscribeListener(Action::ToggleDebugMode, InputEventType::Pressed,
+                              []() { global::DEBUG = !global::DEBUG; }));
 }
 
 void Engine::Run() {

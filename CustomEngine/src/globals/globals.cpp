@@ -2,9 +2,10 @@
 #include <unordered_map>
 namespace global {
 
+bool DEBUG = false;
+float scaleFactor = 1.0f;
+
 std::unordered_map<std::string, float> fontSizes{{"h1", 60.0f}, {"h2", 50.0f},
                                                  {"h3", 45.0f}, {"h4", 35.0f},
                                                  {"h5", 24.0f}, {"p", 15.0f}};
-
-bool DEBUG = false;
-}
+} // namespace global
