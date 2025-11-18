@@ -23,9 +23,6 @@ public:
   GameScene(F &&transition)
       : Scene("GameScene"), transition(std::forward<F>(transition)){};
 
-  // GameScene()
-  //: Scene("GameScene"){}
-
   void Init() override;
   void Update(float dt) override;
   void Draw() const override;
@@ -34,6 +31,7 @@ public:
   ~GameScene() override = default;
 
 private:
+  void SwitchToMap(std::string mapName, std::string currentMapName);
   EntityManager entityManager;
   PhysicsManager physicsManager;
   UiManager uiManager;
@@ -43,5 +41,7 @@ private:
   std::unordered_map<std::string, std::unique_ptr<Map>> loadedMaps;
   GameCamera camera;
   Player *player = nullptr;
-  std::function<void(std::function<void()>)> transition;
+  std::function<void(std::function<void()>, std::function<void()>,
+                     std::function<void()>)>
+      transition;
 };

@@ -18,19 +18,22 @@ void Engine::Init() {
   InputManager &input = InputManager::GetInstance();
 
   // create game scenes
-  auto *gameScene = new GameScene([&input, this](std::function<void()> task) {
-    auto *transitionScene = new TransitionScene(
-        [&input, this]() {
-          input.PopContext();
-          this->sceneManager.Pop();
-          this->sceneManager.Unregister("TransitionScene");
-        },
-        task);
+  auto *gameScene =
+      new GameScene([&input, this](std::function<void()> beforeTask,
+                                   std::function<void()> asyncTask,
+                                   std::function<void()> afterTask) {
+        auto *transitionScene = new TransitionScene(
+            [&input, this]() {
+              input.PopContext();
+              this->sceneManager.Pop();
+              this->sceneManager.Unregister("TransitionScene");
+            },
+            beforeTask, asyncTask, afterTask);
 
-    input.PushContext(InputContext::TransitionContext);
-    this->sceneManager.Register(transitionScene);
-    this->sceneManager.Push("TransitionScene");
-  });
+        input.PushContext(InputContext::TransitionContext);
+        this->sceneManager.Register(transitionScene);
+        this->sceneManager.Push("TransitionScene");
+      });
 
   auto *pauseScene = new PauseScene();
 

@@ -22,13 +22,16 @@ void TransitionScene::Update(float dt) {
   case TransitionState::Hold:
     if (!taskStarted) {
       taskStarted = true;
-      future = std::async(std::launch::async, task);
+      beforeTask();
+      future = std::async(std::launch::async, asyncTask);
     }
     timer += dt;
     if (timer > holdTime && future.valid() &&
         future.wait_for(std::chrono::seconds(0)) == std::future_status::ready) {
+      afterTask();
       state = TransitionState::FadeOut;
       timer = 0.0f;
+    } else {
     }
     break;
 

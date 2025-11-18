@@ -2,7 +2,6 @@
 #include "entities/Player.hpp"
 #include "globals/config.hpp"
 #include "ui/elements/InventoryUi.hpp"
-#include <future>
 #include <iostream>
 #include <raylib.h>
 
@@ -11,6 +10,7 @@ void GameScene::Init() {
 
   // inizializzare mappe in ordine inverso
   LoadMap("map");
+  currentMap->ParseMapData();
 
   //  inizializzare player entity
   entityManager.AddEntity(
@@ -36,12 +36,14 @@ void GameScene::Init() {
       }));
 
   // altri input
-  inputSubscriptions.emplace_back(
-      input.SubscribeListener(Action::TestTransition, InputEventType::Pressed,
-                              [this]() { this->transition([]() {}); }));
+  inputSubscriptions.emplace_back(input.SubscribeListener(
+      Action::TestTransition, InputEventType::Pressed,
+      [this]() { transition([]() {}, []() {}, []() {}); }));
 }
 
 void GameScene::LoadMap(std::string mapName) {
+  // TODO implement a proper cache eviction policy and a cache mechanism
+  // that makes sense
   auto it = loadedMaps.find(mapName);
   if (it != loadedMaps.end()) {
     currentMap = it->second.get();
@@ -51,7 +53,7 @@ void GameScene::LoadMap(std::string mapName) {
   auto newMap = std::make_unique<Map>();
   std::string path = "maps/" + mapName + ".json";
 
-  if (!newMap->Load(path))
+  if (!newMap->LoadMapTexture(path))
     return;
 
   currentMap = newMap.get();
@@ -60,23 +62,34 @@ void GameScene::LoadMap(std::string mapName) {
   std::cout << "GameScene: loaded and set map " << mapName << "\n";
 }
 
+void GameScene::SwitchToMap(std::string mapName, std::string currentMapName) {
+
+  auto beforeTask = [this, mapName]() { LoadMap(mapName); };
+
+  auto asyncTask = [this]() { currentMap->ParseMapData(); };
+
+  auto afterTask = [this, currentMapName]() {
+    Vector2 playerSpawnPoint = currentMap->GetTeleportZoneRect(currentMapName);
+    player->SetPosition(playerSpawnPoint);
+    player->SetNextPosition(player->GetPosition());
+
+    camera.SetTarget(player->GetPosition());
+    camera.SetBounds(currentMap->GetWidth(), currentMap->GetHeight());
+    camera.Update(player->GetPosition());
+  };
+  std::cout << "Starting transition...\n";
+  transition(beforeTask, asyncTask, afterTask);
+}
+
 void GameScene::Update(float dt) {
   entityManager.UpdateAll(dt);
   entityManager.HandleMapCollisions(*currentMap);
-  if (player->GetPosition().x < 0) {
-    // TODO ATTENZIONE: ricorda di correggere la logica perche raylib non è
-    // thread-safe quindi qualsiasi operazione raylib che tocca
-    // texture,finestre,audio, etc deve essere eseguita nel thread principale
 
-    auto task = [this]() {
-      player->SetPosition(currentMap->GetSpawnPoint());
-      player->SetNextPosition(currentMap->GetSpawnPoint());
-      // in teoria non va bene qui il camera update dato che usa raylib
-      // per ora lo lasciamo qui
-      camera.Update(player->GetPosition());
-    };
-    std::cout << "Starting transition...\n";
-    transition(task);
+  std::string teleportMapName =
+      currentMap->CheckTeleport(player->GetHitboxRect());
+
+  if (!teleportMapName.empty()) {
+    SwitchToMap(teleportMapName, currentMap->GetMapName());
   } else {
     camera.Update(player->GetPosition());
     uiManager.Update(dt);
@@ -84,7 +97,6 @@ void GameScene::Update(float dt) {
 }
 
 void GameScene::Draw() const {
-
   BeginMode2D(camera.GetCamera());
   currentMap->Draw();
   entityManager.DrawAll();

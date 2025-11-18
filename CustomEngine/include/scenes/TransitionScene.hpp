@@ -9,10 +9,12 @@ enum class TransitionState { FadeIn, Hold, FadeOut, Done };
 
 class TransitionScene : public Scene {
 public:
-  template <typename F1, typename F2>
-  TransitionScene(F1 &&onDone, F2 &&task)
+  template <typename F1, typename F2, typename F3, typename F4>
+  TransitionScene(F1 &&onDone, F2 &&beforeTask, F3 &&asyncTask, F4 &&afterTask)
       : Scene("TransitionScene"), onDone(std::forward<F1>(onDone)),
-        task(std::forward<F2>(task)) {}
+        beforeTask(std::forward<F2>(beforeTask)),
+        asyncTask(std::forward<F3>(asyncTask)),
+        afterTask(std::forward<F4>(afterTask)){};
 
   void Init() override;
   void Update(float dt) override;
@@ -26,7 +28,10 @@ private:
   float t = 0.0f; // clamped timer
   TransitionState state = TransitionState::FadeIn;
   std::function<void()> onDone;
-  std::function<void()> task;
+
+  std::function<void()> beforeTask;
+  std::function<void()> asyncTask;
+  std::function<void()> afterTask;
   std::future<void> future;
   bool taskStarted = false;
 };

@@ -16,22 +16,14 @@ void EntityManager::DrawAll() const {
   }
 }
 
-void EntityManager::HandleMapCollisions(Map &map){
-  for(auto &entity : entities){
-
-    Hitbox hitbox = entity->GetHitbox();
+void EntityManager::HandleMapCollisions(Map &map) {
+  for (auto &entity : entities) {
     Vector2 position = entity->GetNextPosition();
-    float offsetX = hitbox.width/2.0f;
-    float offsetY = hitbox.height/2.0f;
-    Rectangle recHitbox{
-    position.x-offsetX, position.y-offsetY,
-    hitbox.width,hitbox.height};
-
-    if(!map.CheckCollision(recHitbox)){
-        entity->SetPosition(position);
+    Rectangle recHitbox = entity->GetNextHitboxRect();
+    if (!map.CheckCollision(recHitbox)) {
+      entity->SetPosition(position);
     }
-}
-
+  }
 }
 
 void EntityManager::Clear() { entities.clear(); }

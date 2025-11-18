@@ -1,10 +1,13 @@
 #include "utils/Map.hpp"
 #include "core/ResourceManager.hpp"
 #include "globals/globals.hpp"
+#include <filesystem>
 #include <fstream>
 #include <string>
 
-bool Map::Load(const std::string &jsonPath) {
+bool Map::LoadMapTexture(const std::string &jsonPath) {
+  std::filesystem::path p(jsonPath);
+  mapName = p.stem().string();
   std::ifstream f(jsonPath);
   if (!f.is_open()) {
     TraceLog(LOG_ERROR, "Cannot open map file: %s", jsonPath.c_str());
@@ -26,6 +29,11 @@ bool Map::Load(const std::string &jsonPath) {
     TraceLog(LOG_ERROR, "Cannot load tileset texture: %s", fullPath.c_str());
     return false;
   }
+
+  return true;
+}
+
+void Map::ParseMapData() {
   // Costruisci mappa di collisioni per i tile
   ParseTilesetCollisions(mapData["tilesets"][0]);
 
@@ -35,7 +43,8 @@ bool Map::Load(const std::string &jsonPath) {
   // Trova il punto di spawn del giocatore
   ParseSpawnPoint();
 
-  return true;
+  // Trova le zone di teletrasporto
+  ParseTeleportZones();
 }
 
 void Map::ParseSpawnPoint() {
@@ -50,6 +59,28 @@ void Map::ParseSpawnPoint() {
     }
   }
   spawnPoint = {0, 0};
+}
+
+void Map::ParseTeleportZones() {
+  for (auto &layer : mapData["layers"]) {
+    if (layer["type"] == "objectgroup" && layer["name"] == "spawn") {
+      for (auto &obj : layer["objects"]) {
+        if (obj["type"] == "teleport") {
+          TeleportZone z;
+          z.rect.x = obj["x"];
+          z.rect.y = obj["y"];
+          z.rect.width = obj["width"];
+          z.rect.height = obj["height"];
+          for (auto &prop : obj["properties"]) {
+            if (prop["name"] == "side") {
+              z.side = prop["value"];
+            }
+          }
+          teleportZones[obj["name"]] = z;
+        }
+      }
+    }
+  }
 }
 
 void Map::Unload() {
@@ -187,4 +218,42 @@ bool Map::CheckCollision(const Rectangle &rect) const {
       return true;
   }
   return false;
+}
+
+std::string Map::CheckTeleport(const Rectangle &rect) const {
+  for (auto &pair : teleportZones) {
+    if (CheckCollisionRecs(rect, pair.second.rect))
+      return pair.first;
+  }
+  return "";
+}
+
+Vector2 Map::GetTeleportZoneRect(const std::string &zoneName) const {
+  // printMapTeleportZones();
+  auto it = teleportZones.find(zoneName);
+  if (it != teleportZones.end()) {
+    int offsetX = 0;
+    int offsetY = 0;
+    if (it->second.side == "left")
+      offsetX = 1;
+    if (it->second.side == "top")
+      offsetY = 1;
+    if (it->second.side == "right")
+      offsetX = -1;
+    if (it->second.side == "bottom")
+      offsetY = -1;
+
+    return {it->second.rect.x + it->second.rect.width / 2.0f + 30.0f * offsetX,
+            it->second.rect.y + it->second.rect.height / 2.0f +
+                30.0f * offsetY};
+  }
+  return spawnPoint;
+}
+
+void Map::printMapTeleportZones() const {
+  for (const auto &pair : teleportZones) {
+    TraceLog(LOG_INFO, "Teleport Zone: %s at (%.2f, %.2f, %.2f, %.2f)",
+             pair.first.c_str(), pair.second.rect.x, pair.second.rect.y,
+             pair.second.rect.width, pair.second.rect.height);
+  }
 }

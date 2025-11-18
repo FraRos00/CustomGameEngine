@@ -26,6 +26,8 @@ public:
   void SetPosition(Vector2 position) { this->position = position; }
   void SetNextPosition(Vector2 next) { this->next = next; }
   Hitbox GetHitbox() const { return hitbox; }
+  virtual Rectangle GetHitboxRect() const { return Rectangle{0, 0, 0, 0}; }
+  virtual Rectangle GetNextHitboxRect() const { return Rectangle{0, 0, 0, 0}; }
 
   virtual ~Entity() = default;
 
