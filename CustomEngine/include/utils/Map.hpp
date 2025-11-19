@@ -52,5 +52,5 @@ private:
   void ParseSpawnPoint();
   void ParseTeleportZones();
 
-  void printMapTeleportZones() const;
+  void PrintMapTeleportZones() const;
 };

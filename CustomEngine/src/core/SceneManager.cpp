@@ -24,7 +24,9 @@ void SceneManager::Register(Scene *scene) {
   scenes[name] = std::unique_ptr<Scene>(scene);
 }
 
-void SceneManager::Unregister(const std::string &name) { scenes.erase(name); }
+void SceneManager::Unregister(const std::string &name) {
+  scenes.erase(name); 
+}
 
 void SceneManager::Push(std::string name) {
   auto it = scenes.find(name);

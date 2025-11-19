@@ -14,7 +14,7 @@
 #include <utility>
 
 class GameScene : public Scene {
-public:
+ public:
   // forward serve a fare perfect forwarding ovvero trattare un rvalue e un
   // lvalue come tali e distinguerli quando vengono passati
   //  universal reference && rappresenta potenzialmente sia un rvalue sia un

@@ -229,7 +229,7 @@ std::string Map::CheckTeleport(const Rectangle &rect) const {
 }
 
 Vector2 Map::GetTeleportZoneRect(const std::string &zoneName) const {
-  // printMapTeleportZones();
+  // PrintMapTeleportZones();
   auto it = teleportZones.find(zoneName);
   if (it != teleportZones.end()) {
     int offsetX = 0;
@@ -250,7 +250,7 @@ Vector2 Map::GetTeleportZoneRect(const std::string &zoneName) const {
   return spawnPoint;
 }
 
-void Map::printMapTeleportZones() const {
+void Map::PrintMapTeleportZones() const {
   for (const auto &pair : teleportZones) {
     TraceLog(LOG_INFO, "Teleport Zone: %s at (%.2f, %.2f, %.2f, %.2f)",
              pair.first.c_str(), pair.second.rect.x, pair.second.rect.y,
