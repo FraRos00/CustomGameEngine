@@ -1,13 +1,11 @@
 #pragma once
-#include "core/InputManager.hpp"
-#include "core/ResourceManager.hpp"
 #include "utils/InputSubscription.hpp"
 #include "core/SceneManager.hpp"
 
 
 class Engine {
   public:
-    void Init();
+    void Init(float scale);
     void Run();
     void Shutdown();
 
