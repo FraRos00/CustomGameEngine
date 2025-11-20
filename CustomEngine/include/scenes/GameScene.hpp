@@ -19,6 +19,7 @@ class GameScene : public Scene {
   // lvalue come tali e distinguerli quando vengono passati
   //  universal reference && rappresenta potenzialmente sia un rvalue sia un
   //  lvalue ed e' condizione necessaria per fare forwarding
+
   template <typename F>
   GameScene(F &&transition)
       : Scene("GameScene"), transition(std::forward<F>(transition)){};

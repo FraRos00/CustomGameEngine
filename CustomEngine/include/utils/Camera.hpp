@@ -4,8 +4,8 @@
 
 class GameCamera {
 public:
-  GameCamera(Vector2 target = {config::SCREENWIDTH / 2.0f,
-                               config::SCREENHEIGHT / 2.0f},
+  GameCamera(Vector2 target = {GetScreenWidth() / 2.0f,
+                               GetScreenHeight() / 2.0f},
              float zoom = 1.0f,
              Vector2 offset = {config::SCREENWIDTH / 2.0f,
                                config::SCREENHEIGHT / 2.0f},

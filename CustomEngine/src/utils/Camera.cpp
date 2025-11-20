@@ -1,4 +1,5 @@
 #include "utils/Camera.hpp"
+#include <raylib.h>
 #include <raymath.h>
 
 
@@ -31,6 +32,6 @@ void GameCamera::SetBounds(float backgroundWidth, float backgroundHeight){
   bgH = backgroundHeight;
 
   // Dimensione visibile in world space
-  viewW = config::SCREENWIDTH / camera.zoom;
-  viewH = config::SCREENHEIGHT / camera.zoom;
+  viewW = GetScreenWidth() / camera.zoom;
+  viewH = GetScreenHeight() / camera.zoom;
 }

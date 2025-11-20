@@ -10,7 +10,7 @@
 
 void Engine::Init() {
   // fix scaling problems on wayland
-  InitWindow(config::SCREENWIDTH, config::SCREENHEIGHT, "Custom Engine");
+  InitWindow(config::SCREENWIDTH/2, config::SCREENHEIGHT/2, "Custom Engine");
   SetTargetFPS(60);
   SetRandomSeed(time(nullptr));
   SetExitKey(KEY_Q);
