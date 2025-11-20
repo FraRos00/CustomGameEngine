@@ -4,13 +4,14 @@
 #include "scenes/GameScene.hpp"
 #include "scenes/PauseScene.hpp"
 #include "scenes/TransitionScene.hpp"
+#include "core/InputManager.hpp"
+#include "core/ResourceManager.hpp"
 #include <ctime>
 #include <iostream>
 #include <raylib.h>
 
-void Engine::Init() {
-  // fix scaling problems on wayland
-  InitWindow(config::SCREENWIDTH/2, config::SCREENHEIGHT/2, "Custom Engine");
+void Engine::Init(float scale) {
+  InitWindow(config::SCREENWIDTH/scale, config::SCREENHEIGHT/scale, "Custom Engine");
   SetTargetFPS(60);
   SetRandomSeed(time(nullptr));
   SetExitKey(KEY_Q);

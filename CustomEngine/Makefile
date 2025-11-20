@@ -6,9 +6,14 @@ CXXFLAGS := -std=c++17 -Wall -Wextra -Iinclude -MMD -MP
 # CXX_FLAGS := -std=c++17 -Iinclude -MMD -MP -O2
 
 # Per Windows
-#LIBS := -lraylib -lopengl32 -lgdi32 -lwinmm
+ifeq ($(OS),Windows_NT)
+	LIBS := -lraylib -lopengl32 -lgdi32 -lwinmm -lwaylandscale
+else
 # Per linux
-LIBS := -lraylib -lglfw -lm -ldl -lpthread -lrt
+	LIBS := -lraylib -lglfw -lm -ldl -lpthread -lrt -lwaylandscale -lwayland-client
+endif
+
+LDFLAGS := -Llib
 
 SRC_DIR := src
 BUILD_DIR := build
@@ -24,7 +29,7 @@ DEPS := $(OBJ:.o=.d)
 
 $(BIN): $(OBJ)
 	@echo "Linking..."
-	$(CXX) $(OBJ) -o $@ $(LIBS)
+	$(CXX) $(OBJ) -o $@ $(LDFLAGS) $(LIBS)
 	@echo "Build completed: $(BIN)"
 
 # --- Compilazione singoli file
