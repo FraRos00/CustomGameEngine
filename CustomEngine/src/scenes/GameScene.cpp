@@ -108,25 +108,32 @@ void GameScene::Update(float dt) {
       currentMap->CheckTeleport(player->GetHitboxRect());
 
   if (!teleportMapName.empty()) {
+    // TODO: che succede se il player si teletrasporta di nuovo prima che mapsReady sia true?
     TransitionToMap(teleportMapName, currentMap->GetMapName());
-    LoadNeighbourMaps();
-
-    parseFuture =
-        std::async(std::launch::async, [this]() { ParseLoadedMaps(); });
+    madeTransition = true;
   } else {
     camera.Update(player->GetPosition());
     uiManager.Update(dt);
+
+    if (madeTransition) {
+      // TransitionToMap non fa fermare l'esecuzione... l'update finisce anche
+      // mentre transitionscene è attiva prima di mettersi in pausa
+      madeTransition = false;
+      mapsReady = false;
+      LoadNeighbourMaps();
+      parseFuture =
+          std::async(std::launch::async, [this]() { ParseLoadedMaps(); });
+    }
   }
 
-  if(!mapsReady && parseFuture.valid()){
+  if (!mapsReady && parseFuture.valid()) {
     auto status = parseFuture.wait_for(std::chrono::milliseconds(0));
 
-    if(status == std::future_status::ready){
+    if (status == std::future_status::ready) {
       parseFuture.get();
       mapsReady = true;
     }
   }
-
 }
 
 void GameScene::Draw() const {

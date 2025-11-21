@@ -51,5 +51,6 @@ private:
       transition;
   std::future<void> parseFuture;
   bool mapsReady = false;
+  bool madeTransition = false;
 
 };
