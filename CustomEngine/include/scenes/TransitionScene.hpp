@@ -21,17 +21,19 @@ public:
   void Draw() const override;
 
 private:
+  int dots = 0;
   float alpha = 0.0f;
   float transitionDuration = 1.0f;
   float holdTime = 0.5f;
   float timer = 0.0f;
   float t = 0.0f; // clamped timer
   TransitionState state = TransitionState::FadeIn;
-  std::function<void()> onDone;
 
+  std::function<void()> onDone;
   std::function<void()> beforeTask;
   std::function<void()> asyncTask;
   std::function<void()> afterTask;
+
   std::future<void> future;
   bool taskStarted = false;
 };

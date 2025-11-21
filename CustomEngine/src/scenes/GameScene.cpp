@@ -60,7 +60,8 @@ void GameScene::LoadMap(std::string mapName) {
   if (!newMap->LoadMapTexture(path))
     return;
 
-  loadedMaps.Put(mapName, std::move(newMap));
+  loadedMaps.Put(mapName, std::move(newMap),
+                 currentMap ? currentMap->GetMapName() : "");
   std::cout << "GameScene: loaded map " << mapName << "\n";
 }
 
@@ -85,7 +86,6 @@ void GameScene::TransitionToMap(std::string newMapName,
 }
 
 void GameScene::LoadNeighbourMaps() {
-  // TODO: implement an eviction algorithm
 
   auto neighbourMaps = currentMap->GetAllTeleportZones();
   for (const auto &mapName : neighbourMaps) {

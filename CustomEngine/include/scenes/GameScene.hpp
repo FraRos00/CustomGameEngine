@@ -43,7 +43,7 @@ private:
   UiManager uiManager;
   // TODO never delete currentMap in loadedMaps or currentMap will dangle
   // (use shared pointer?)
-  Map *currentMap;
+  Map *currentMap = nullptr;
   LRUMapCache loadedMaps{5};
   GameCamera camera;
   Player *player = nullptr;
