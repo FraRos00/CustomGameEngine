@@ -44,14 +44,14 @@ void GameScene::Init() {
 void GameScene::SwitchToMap(std::string mapName) {
 
   LoadMap(mapName);
-  currentMap = loadedMaps[mapName].get();
+  currentMap = loadedMaps.Get(mapName);
 
   std::cout << "GameScene: switched to map " << mapName << "\n";
 }
 
 void GameScene::LoadMap(std::string mapName) {
-  auto it = loadedMaps.find(mapName);
-  if (it != loadedMaps.end())
+  auto it = loadedMaps.Get(mapName);
+  if (it != nullptr)
     return;
 
   auto newMap = std::make_unique<Map>();
@@ -60,8 +60,7 @@ void GameScene::LoadMap(std::string mapName) {
   if (!newMap->LoadMapTexture(path))
     return;
 
-  loadedMaps[mapName] = std::move(newMap);
-
+  loadedMaps.Put(mapName, std::move(newMap));
   std::cout << "GameScene: loaded map " << mapName << "\n";
 }
 
@@ -95,8 +94,9 @@ void GameScene::LoadNeighbourMaps() {
 }
 
 void GameScene::ParseLoadedMaps() {
-  for (const auto &[key, value] : loadedMaps) {
-    value->ParseMapData();
+  auto maps = loadedMaps.GetAll();
+  for (const auto map : maps) {
+    map->ParseMapData();
   }
 }
 
@@ -108,7 +108,8 @@ void GameScene::Update(float dt) {
       currentMap->CheckTeleport(player->GetHitboxRect());
 
   if (!teleportMapName.empty()) {
-    // TODO: che succede se il player si teletrasporta di nuovo prima che mapsReady sia true?
+    // TODO: che succede se il player si teletrasporta di nuovo prima che
+    // mapsReady sia true?
     TransitionToMap(teleportMapName, currentMap->GetMapName());
     madeTransition = true;
   } else {

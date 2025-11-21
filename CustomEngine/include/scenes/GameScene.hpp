@@ -5,6 +5,7 @@
 #include "entities/Player.hpp"
 #include "ui/UiManager.hpp"
 #include "utils/Camera.hpp"
+#include "utils/LRUMapCache.hpp"
 #include "utils/Map.hpp"
 #include <functional>
 #include <future>
@@ -43,7 +44,7 @@ private:
   // TODO never delete currentMap in loadedMaps or currentMap will dangle
   // (use shared pointer?)
   Map *currentMap;
-  std::unordered_map<std::string, std::unique_ptr<Map>> loadedMaps;
+  LRUMapCache loadedMaps{5};
   GameCamera camera;
   Player *player = nullptr;
   std::function<void(std::function<void()>, std::function<void()>,
@@ -52,5 +53,4 @@ private:
   std::future<void> parseFuture;
   bool mapsReady = false;
   bool madeTransition = false;
-
 };

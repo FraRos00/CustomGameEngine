@@ -8,16 +8,17 @@ CXXFLAGS := -std=c++17 -Wall -Wextra -Iinclude -MMD -MP
 # Per Windows
 ifeq ($(OS),Windows_NT)
 	LIBS := -lraylib -lopengl32 -lgdi32 -lwinmm -lwaylandscale
+	BIN := game.exe
 else
 # Per linux
 	LIBS := -lraylib -lglfw -lm -ldl -lpthread -lrt -lwaylandscale -lwayland-client
+	BIN := game
 endif
 
 LDFLAGS := -Llib
 
 SRC_DIR := src
 BUILD_DIR := build
-BIN := game.exe
 
 # --- Trova i sorgenti .cpp ---
 
