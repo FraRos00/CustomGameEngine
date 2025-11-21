@@ -25,7 +25,8 @@ std::vector<Map *> LRUMapCache::GetAll() {
   return result;
 }
 
-void LRUMapCache::Put(const std::string &key, std::unique_ptr<Map> map) {
+void LRUMapCache::Put(const std::string &key, std::unique_ptr<Map> map,
+                      const std::string &currentMap) {
 
   auto it = cache.find(key);
 
@@ -38,7 +39,7 @@ void LRUMapCache::Put(const std::string &key, std::unique_ptr<Map> map) {
   }
 
   if (cache.size() > maxSize)
-    EvictLRU();
+    EvictLRU(currentMap);
 
   usage.push_front(key);
   cache[key] = {std::move(map), usage.begin()};
@@ -48,12 +49,14 @@ bool LRUMapCache::Contains(const std::string &key) {
   return cache.find(key) != cache.end();
 }
 
-void LRUMapCache::EvictLRU() {
-  auto lruKey = usage.back();
-  usage.pop_back();
-
-  auto it = cache.find(lruKey);
-  if (it != cache.end()) {
-    cache.erase(it);
+void LRUMapCache::EvictLRU(const std::string &currentMap) {
+  while (!usage.empty()) {
+    auto lruKey = usage.back();
+    if (lruKey == currentMap) {
+      usage.pop_back();
+      usage.push_front(lruKey);
+      continue;
+    }
+    cache.erase(lruKey);
   }
 }

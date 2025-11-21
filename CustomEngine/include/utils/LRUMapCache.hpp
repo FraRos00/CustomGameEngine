@@ -13,7 +13,8 @@ public:
 
   Map *Get(const std::string &key);
 
-  void Put(const std::string &key, std::unique_ptr<Map> map);
+  void Put(const std::string &key, std::unique_ptr<Map> map,
+           const std::string &currentMap);
 
   bool Contains(const std::string &key);
 
@@ -30,5 +31,5 @@ private:
 
   size_t maxSize = 5;
 
-  void EvictLRU();
+  void EvictLRU(const std::string &currentMap);
 };

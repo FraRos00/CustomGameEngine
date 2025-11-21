@@ -1,17 +1,18 @@
 #include "core/Engine.hpp"
+#include "core/InputManager.hpp"
+#include "core/ResourceManager.hpp"
 #include "globals/config.hpp"
 #include "globals/globals.hpp"
 #include "scenes/GameScene.hpp"
 #include "scenes/PauseScene.hpp"
 #include "scenes/TransitionScene.hpp"
-#include "core/InputManager.hpp"
-#include "core/ResourceManager.hpp"
 #include <ctime>
 #include <iostream>
 #include <raylib.h>
 
 void Engine::Init(float scale) {
-  InitWindow(config::SCREENWIDTH/scale, config::SCREENHEIGHT/scale, "Custom Engine");
+  InitWindow(config::SCREENWIDTH / scale, config::SCREENHEIGHT / scale,
+             "Custom Engine");
   SetTargetFPS(60);
   SetRandomSeed(time(nullptr));
   SetExitKey(KEY_Q);

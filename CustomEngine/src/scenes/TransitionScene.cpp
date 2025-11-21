@@ -1,5 +1,8 @@
 #include "scenes/TransitionScene.hpp"
+#include "globals/globals.hpp"
+#include "utils/Text.hpp"
 #include <algorithm>
+#include <raylib.h>
 
 void TransitionScene::Init() {
   state = TransitionState::FadeIn;
@@ -33,6 +36,7 @@ void TransitionScene::Update(float dt) {
       state = TransitionState::FadeOut;
       timer = 0.0f;
     } else {
+      dots = (dots + 1) % 3;
     }
     break;
 
@@ -56,4 +60,11 @@ void TransitionScene::Update(float dt) {
 
 void TransitionScene::Draw() const {
   DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), Fade(BLACK, alpha));
+  std::string textContent = "Loading";
+  for (int i = 0; i == dots; i++) {
+    textContent += ".";
+  }
+  Text text(textContent, {GetScreenWidth() / 2.0f, GetScreenHeight() / 2.0f},
+            global::fontSizes["h2"], WHITE, 5);
+  text.Draw();
 }
