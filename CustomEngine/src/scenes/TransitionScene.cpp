@@ -28,6 +28,7 @@ void TransitionScene::Update(float dt) {
     timer += dt;
     if (timer > holdTime && future.valid() &&
         future.wait_for(std::chrono::seconds(0)) == std::future_status::ready) {
+      future.get();
       afterTask();
       state = TransitionState::FadeOut;
       timer = 0.0f;

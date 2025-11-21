@@ -33,6 +33,8 @@ public:
   bool CheckCollision(const Rectangle &rect) const;
   std::string CheckTeleport(const Rectangle &rect) const;
   Vector2 GetTeleportZoneRect(const std::string &zoneName) const;
+  std::vector<std::string> GetAllTeleportZones()const;
+
   std::string GetMapName() const { return mapName; };
 
 private:
