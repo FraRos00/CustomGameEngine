@@ -1,17 +1,17 @@
 #include "scenes/GameScene.hpp"
 #include "entities/Player.hpp"
-#include "globals/config.hpp"
 #include "ui/elements/InventoryUi.hpp"
+#include <chrono>
+#include <future>
 #include <iostream>
 #include <raylib.h>
 
 void GameScene::Init() {
   InputManager &input = InputManager::GetInstance();
 
-  // inizializzare mappe in ordine inverso
-  LoadMap("map");
-  currentMap->ParseMapData();
-
+  SwitchToMap("map");
+  // LoadNeighbourMaps();
+  ParseLoadedMaps();
   //  inizializzare player entity
   entityManager.AddEntity(
       std::make_unique<Player>(currentMap->GetSpawnPoint(), 200.0f));
@@ -41,30 +41,34 @@ void GameScene::Init() {
       [this]() { transition([]() {}, []() {}, []() {}); }));
 }
 
+void GameScene::SwitchToMap(std::string mapName) {
+
+  LoadMap(mapName);
+  currentMap = loadedMaps[mapName].get();
+
+  std::cout << "GameScene: switched to map " << mapName << "\n";
+}
+
 void GameScene::LoadMap(std::string mapName) {
-  // TODO implement a proper cache eviction policy and a cache mechanism
-  // that makes sense
   auto it = loadedMaps.find(mapName);
-  if (it != loadedMaps.end()) {
-    currentMap = it->second.get();
-    std::cout << "GameScene: switched to cached map " << mapName << "\n";
+  if (it != loadedMaps.end())
     return;
-  }
+
   auto newMap = std::make_unique<Map>();
   std::string path = "maps/" + mapName + ".json";
 
   if (!newMap->LoadMapTexture(path))
     return;
 
-  currentMap = newMap.get();
   loadedMaps[mapName] = std::move(newMap);
 
-  std::cout << "GameScene: loaded and set map " << mapName << "\n";
+  std::cout << "GameScene: loaded map " << mapName << "\n";
 }
 
-void GameScene::SwitchToMap(std::string mapName, std::string currentMapName) {
+void GameScene::TransitionToMap(std::string newMapName,
+                                std::string currentMapName) {
 
-  auto beforeTask = [this, mapName]() { LoadMap(mapName); };
+  auto beforeTask = [this, newMapName]() { SwitchToMap(newMapName); };
 
   auto asyncTask = [this]() { currentMap->ParseMapData(); };
 
@@ -81,6 +85,21 @@ void GameScene::SwitchToMap(std::string mapName, std::string currentMapName) {
   transition(beforeTask, asyncTask, afterTask);
 }
 
+void GameScene::LoadNeighbourMaps() {
+  // TODO: implement an eviction algorithm
+
+  auto neighbourMaps = currentMap->GetAllTeleportZones();
+  for (const auto &mapName : neighbourMaps) {
+    LoadMap(mapName);
+  }
+}
+
+void GameScene::ParseLoadedMaps() {
+  for (const auto &[key, value] : loadedMaps) {
+    value->ParseMapData();
+  }
+}
+
 void GameScene::Update(float dt) {
   entityManager.UpdateAll(dt);
   entityManager.HandleMapCollisions(*currentMap);
@@ -89,11 +108,25 @@ void GameScene::Update(float dt) {
       currentMap->CheckTeleport(player->GetHitboxRect());
 
   if (!teleportMapName.empty()) {
-    SwitchToMap(teleportMapName, currentMap->GetMapName());
+    TransitionToMap(teleportMapName, currentMap->GetMapName());
+    LoadNeighbourMaps();
+
+    parseFuture =
+        std::async(std::launch::async, [this]() { ParseLoadedMaps(); });
   } else {
     camera.Update(player->GetPosition());
     uiManager.Update(dt);
   }
+
+  if(!mapsReady && parseFuture.valid()){
+    auto status = parseFuture.wait_for(std::chrono::milliseconds(0));
+
+    if(status == std::future_status::ready){
+      parseFuture.get();
+      mapsReady = true;
+    }
+  }
+
 }
 
 void GameScene::Draw() const {

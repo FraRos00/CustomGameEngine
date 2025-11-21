@@ -7,6 +7,7 @@
 #include "utils/Camera.hpp"
 #include "utils/Map.hpp"
 #include <functional>
+#include <future>
 #include <memory>
 #include <raylib.h>
 #include <string>
@@ -14,7 +15,7 @@
 #include <utility>
 
 class GameScene : public Scene {
- public:
+public:
   // forward serve a fare perfect forwarding ovvero trattare un rvalue e un
   // lvalue come tali e distinguerli quando vengono passati
   //  universal reference && rappresenta potenzialmente sia un rvalue sia un
@@ -27,12 +28,15 @@ class GameScene : public Scene {
   void Init() override;
   void Update(float dt) override;
   void Draw() const override;
+  void SwitchToMap(std::string mapName);
   void LoadMap(std::string mapName);
-
   ~GameScene() override = default;
 
 private:
-  void SwitchToMap(std::string mapName, std::string currentMapName);
+  void TransitionToMap(std::string mapName, std::string currentMapName);
+  void LoadNeighbourMaps();
+  void ParseLoadedMaps();
+
   EntityManager entityManager;
   PhysicsManager physicsManager;
   UiManager uiManager;
@@ -45,4 +49,7 @@ private:
   std::function<void(std::function<void()>, std::function<void()>,
                      std::function<void()>)>
       transition;
+  std::future<void> parseFuture;
+  bool mapsReady = false;
+
 };

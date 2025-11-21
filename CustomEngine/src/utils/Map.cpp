@@ -3,7 +3,9 @@
 #include "globals/globals.hpp"
 #include <filesystem>
 #include <fstream>
+#include <iostream>
 #include <string>
+#include <vector>
 
 bool Map::LoadMapTexture(const std::string &jsonPath) {
   std::filesystem::path p(jsonPath);
@@ -34,6 +36,10 @@ bool Map::LoadMapTexture(const std::string &jsonPath) {
 }
 
 void Map::ParseMapData() {
+  if (!tileCollisionMap.empty() && !collisions.empty() && !teleportZones.empty()) {
+    std::cout << "Map already parsed in cache\n";
+    return;
+  }
   // Costruisci mappa di collisioni per i tile
   ParseTilesetCollisions(mapData["tilesets"][0]);
 
@@ -248,6 +254,19 @@ Vector2 Map::GetTeleportZoneRect(const std::string &zoneName) const {
                 30.0f * offsetY};
   }
   return spawnPoint;
+}
+
+std::vector<std::string> Map::GetAllTeleportZones() const {
+
+  std::vector<std::string> mapNames;
+  mapNames.reserve(teleportZones.size());
+
+  for (const auto &[key, value] : teleportZones) {
+    mapNames.push_back(key);
+  }
+
+  // Return Value Optimization (RVO) -> non effettua copia del vector
+  return mapNames;
 }
 
 void Map::PrintMapTeleportZones() const {
