@@ -1,6 +1,5 @@
-CustomEngine/compile_commands.json
 CustomEngine/build/
 CustomEngine/game.exe
 CustomEngine/.cache/
-CustomEngine/maps/
-CustomEngine/character/
+# CustomEngine/maps/
+# CustomEngine/character/
