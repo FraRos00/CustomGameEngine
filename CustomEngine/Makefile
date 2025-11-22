@@ -1,7 +1,7 @@
 CXX := g++
 
 #Per sviluppo
-CXXFLAGS := -std=c++17 -Wall -Wextra -Iinclude -MMD -MP
+CXXFLAGS := -g -std=c++17 -Wall -Wextra -Iinclude -MMD -MP
 # Per rilascio
 # CXX_FLAGS := -std=c++17 -Iinclude -MMD -MP -O2
 
