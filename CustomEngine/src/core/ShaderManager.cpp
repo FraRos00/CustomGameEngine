@@ -1,4 +1,5 @@
 #include "core/ShaderManager.hpp"
+#include <memory>
 #include <raylib.h>
 
 ShaderManager &ShaderManager::GetInstance() {
@@ -13,17 +14,19 @@ void ShaderManager::Load(const std::string &name, const std::string &vspath,
     return;
   }
 
-  Shader shader;
-  shader = LoadShader(vspath.c_str(), fspath.c_str());
-  if (shader.locs != nullptr) {
-    shaders[name] = shader;
+  auto shader = std::make_unique<Shader>();
+  *shader = LoadShader(vspath.c_str(), fspath.c_str());
+  if (shader->locs != nullptr) {
+    shaders[name] = std::move(shader);
+  } else {
+    UnloadShader(*shader);
   }
 }
 
 Shader *ShaderManager::GetShader(const std::string &name) {
   auto it = shaders.find(name);
   if (it != shaders.end())
-    return &it->second;
+    return it->second.get();
   else
     return nullptr;
 }
@@ -34,7 +37,7 @@ int ShaderManager::GetLocation(const std::string &name,
   if (it == shaders.end())
     return -1;
 
-  return GetShaderLocation(it->second, uniform.c_str());
+  return GetShaderLocation(*it->second, uniform.c_str());
 }
 
 void ShaderManager::Set(const std::string &name, const std::string &uniform,
@@ -46,12 +49,13 @@ void ShaderManager::Set(const std::string &name, const std::string &uniform,
   int loc = GetLocation(name, uniform);
   if (loc < 0)
     return;
-  SetShaderValue(it->second, loc, value, type);
+  SetShaderValue(*it->second, loc, value, type);
 }
 
 void ShaderManager::UnloadAll() {
   for (auto &[_, shader] : shaders) {
-    UnloadShader(shader);
+    if (shader)
+      UnloadShader(*shader);
   }
   shaders.clear();
 }

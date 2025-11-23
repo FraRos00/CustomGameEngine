@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include <raylib.h>
 #include <string>
 #include <unordered_map>
@@ -29,7 +30,7 @@ private:
   ResourceManager(const ResourceManager &) = delete;
   ResourceManager &operator=(const ResourceManager &) = delete;
 
-  std::unordered_map<std::string, TextureResource> textures;
-  std::unordered_map<std::string, Font> fonts;
-  std::unordered_map<std::string, Sound> sounds;
+  std::unordered_map<std::string, std::unique_ptr<TextureResource>> textures;
+  std::unordered_map<std::string, std::unique_ptr<Font>> fonts;
+  std::unordered_map<std::string, std::unique_ptr<Sound>> sounds;
 };

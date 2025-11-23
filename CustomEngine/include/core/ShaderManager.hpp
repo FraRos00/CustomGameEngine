@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include <raylib.h>
 #include <string>
 #include <unordered_map>
@@ -27,6 +28,6 @@ private:
   ShaderManager(const ShaderManager &) = delete;
   ShaderManager &operator=(const ShaderManager &) = delete;
 
-  std::unordered_map<std::string, Shader> shaders;
+  std::unordered_map<std::string, std::unique_ptr<Shader>> shaders;
   // std::unordered_map<std::string, int> locations;
 };

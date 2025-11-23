@@ -12,8 +12,8 @@
 #include <raylib.h>
 
 void Engine::Init(float scale) {
-  InitWindow(config::SCREENWIDTH / scale, config::SCREENHEIGHT / scale,
-             "Custom Engine");
+  InitWindow(config::SCREENWIDTH / (scale * 2),
+             config::SCREENHEIGHT / (scale * 2), "Custom Engine");
   SetTargetFPS(60);
   SetRandomSeed(time(nullptr));
   SetExitKey(KEY_Q);
