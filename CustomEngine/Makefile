@@ -12,11 +12,13 @@ ifeq ($(OS),Windows_NT)
 else
 # Per linux
 	LIBS := -lraylib -lglfw -lm -ldl -lpthread -lrt -lwaylandscale -lwayland-client
+	# LIBS := -lraylib -lGL -lm -lpthread -ldl -lrt -lX11 -lwaylandscale -lwayland-client
 	BIN := game
 endif
 
 LDFLAGS := -Llib
 
+# LDFLAGS := -L/usr/local/lib -Llib
 SRC_DIR := src
 BUILD_DIR := build
 
