@@ -1,6 +1,7 @@
 #include "core/Engine.hpp"
 #include "core/InputManager.hpp"
 #include "core/ResourceManager.hpp"
+#include "core/ShaderManager.hpp"
 #include "globals/config.hpp"
 #include "globals/globals.hpp"
 #include "scenes/GameScene.hpp"
@@ -18,6 +19,9 @@ void Engine::Init(float scale) {
   SetExitKey(KEY_Q);
 
   InputManager &input = InputManager::GetInstance();
+  ShaderManager &sm = ShaderManager::GetInstance();
+
+  sm.Load("red", "src/shaders/color.vs", "src/shaders/color.fs");
 
   // create game scenes
   auto *gameScene =
@@ -75,5 +79,6 @@ void Engine::Run() {
 
 void Engine::Shutdown() {
   ResourceManager::GetInstance().UnloadAll();
+  ShaderManager::GetInstance().UnloadAll();
   CloseWindow();
 }

@@ -1,6 +1,6 @@
 #include "animations/Animation.hpp"
 #include "core/ResourceManager.hpp"
-#include <iostream>
+#include "core/ShaderManager.hpp"
 #include <raylib.h>
 
 Animation::Animation(std::string ssPath, int startX, int startY, int frameWidth,
@@ -12,9 +12,7 @@ Animation::Animation(std::string ssPath, int startX, int startY, int frameWidth,
   ResourceManager &rm = ResourceManager::GetInstance();
   rm.LoadTextureFromPath(ssPath);
   spritesheet = rm.GetTexture(ssPath);
-  // shader = LoadShader("src/shaders/color.vs", "src/shaders/color.fs");
-  // FIX: remove
-  std::cout << GetWorkingDirectory() << std::endl;
+  shader = ShaderManager::GetInstance().GetShader("red");
 }
 
 Animation::Animation(const Animation &other)
@@ -102,7 +100,6 @@ Animation &Animation::operator=(Animation &&other) noexcept {
 
 Animation::~Animation() {
   ResourceManager::GetInstance().UnloadTextureFromPath(ssPath);
-  // UnloadShader(shader);
 }
 
 void Animation::Update(float dt) {
@@ -120,11 +117,11 @@ void Animation::Draw(Vector2 position, Color tint) const {
     int frameX = startX + currentFrame * frameWidth;
     Rectangle src{(float)frameX, (float)startY, (float)frameWidth,
                   (float)frameHeight};
-    // BeginShaderMode(shader);
+    BeginShaderMode(*shader);
     DrawTexturePro(*spritesheet, src, dst,
                    {frameWidth * scale / 2, frameHeight * scale / 2}, 0.0f,
                    tint);
-    // EndShaderMode();
+    EndShaderMode();
   } else {
     DrawRectangleRec(dst, RED);
   }

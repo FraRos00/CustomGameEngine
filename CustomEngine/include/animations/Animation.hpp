@@ -25,7 +25,7 @@ public:
 private:
   std::string ssPath = "";
   Texture2D *spritesheet = nullptr;
-  Shader shader;
+  Shader *shader;
   int frameCount = 0;
   int currentFrame = 0;
   float frameSpeed = 12.0f; // we want to animate at 12FPS
