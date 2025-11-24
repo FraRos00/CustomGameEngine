@@ -4,6 +4,7 @@
 #include <chrono>
 #include <future>
 #include <iostream>
+#include <memory>
 #include <raylib.h>
 
 void GameScene::Init() {

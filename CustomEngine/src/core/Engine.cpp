@@ -1,22 +1,27 @@
 #include "core/Engine.hpp"
+#include "core/InputManager.hpp"
+#include "core/ResourceManager.hpp"
+#include "core/ShaderManager.hpp"
 #include "globals/config.hpp"
 #include "globals/globals.hpp"
 #include "scenes/GameScene.hpp"
 #include "scenes/PauseScene.hpp"
 #include "scenes/TransitionScene.hpp"
-#include "core/InputManager.hpp"
-#include "core/ResourceManager.hpp"
 #include <ctime>
 #include <iostream>
 #include <raylib.h>
 
 void Engine::Init(float scale) {
-  InitWindow(config::SCREENWIDTH/scale, config::SCREENHEIGHT/scale, "Custom Engine");
+  InitWindow(config::SCREENWIDTH / (scale * 2),
+             config::SCREENHEIGHT / (scale * 2), "Custom Engine");
   SetTargetFPS(60);
   SetRandomSeed(time(nullptr));
   SetExitKey(KEY_Q);
 
   InputManager &input = InputManager::GetInstance();
+  ShaderManager &sm = ShaderManager::GetInstance();
+
+  sm.Load("red", "src/shaders/color.vs", "src/shaders/color.fs");
 
   // create game scenes
   auto *gameScene =
@@ -74,5 +79,6 @@ void Engine::Run() {
 
 void Engine::Shutdown() {
   ResourceManager::GetInstance().UnloadAll();
+  ShaderManager::GetInstance().UnloadAll();
   CloseWindow();
 }

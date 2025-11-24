@@ -3,16 +3,15 @@
 #include "core/Scene.hpp"
 #include "entities/EntityManager.hpp"
 #include "entities/Player.hpp"
+#include "globals/config.hpp"
 #include "ui/UiManager.hpp"
 #include "utils/Camera.hpp"
 #include "utils/LRUMapCache.hpp"
 #include "utils/Map.hpp"
 #include <functional>
 #include <future>
-#include <memory>
 #include <raylib.h>
 #include <string>
-#include <unordered_map>
 #include <utility>
 
 class GameScene : public Scene {
@@ -44,7 +43,7 @@ private:
   // TODO never delete currentMap in loadedMaps or currentMap will dangle
   // (use shared pointer?)
   Map *currentMap = nullptr;
-  LRUMapCache loadedMaps{5};
+  LRUMapCache loadedMaps{config::MAP_CACHE_SIZE};
   GameCamera camera;
   Player *player = nullptr;
   std::function<void(std::function<void()>, std::function<void()>,
