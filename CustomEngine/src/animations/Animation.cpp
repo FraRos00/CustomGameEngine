@@ -1,7 +1,6 @@
 #include "animations/Animation.hpp"
 #include "core/ResourceManager.hpp"
 #include "core/ShaderManager.hpp"
-#include <iostream>
 #include <raylib.h>
 
 Animation::Animation(std::string ssPath, int startX, int startY, int frameWidth,
@@ -15,6 +14,8 @@ Animation::Animation(std::string ssPath, int startX, int startY, int frameWidth,
   spritesheet = rm.GetTexture(ssPath);
   ShaderManager &sm = ShaderManager::GetInstance();
   shader = sm.GetShader("red");
+  Vector4 tint{1.0f, 0, 0, 1.0f};
+  sm.Set("red", "tint", &tint, SHADER_UNIFORM_VEC4);
 }
 
 Animation::Animation(const Animation &other)
