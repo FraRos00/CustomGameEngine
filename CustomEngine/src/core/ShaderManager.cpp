@@ -1,4 +1,5 @@
 #include "core/ShaderManager.hpp"
+#include <iostream>
 #include <memory>
 #include <raylib.h>
 
@@ -18,6 +19,7 @@ void ShaderManager::Load(const std::string &name, const std::string &vspath,
   *shader = LoadShader(vspath.c_str(), fspath.c_str());
   if (shader->locs != nullptr) {
     shaders[name] = std::move(shader);
+    std::cout << "[DEBUG!!] Shader loaded successfully" << std::endl;
   } else {
     UnloadShader(*shader);
   }
@@ -25,10 +27,13 @@ void ShaderManager::Load(const std::string &name, const std::string &vspath,
 
 Shader *ShaderManager::GetShader(const std::string &name) {
   auto it = shaders.find(name);
-  if (it != shaders.end())
+  if (it != shaders.end()) {
+    std::cout << "[DEBUG!!!] VALID SHADER PTR RETURN!!!!!!!" << std::endl;
     return it->second.get();
-  else
-    return nullptr;
+  }
+
+  std::cout << "[DEBUG!!!] NULL PTR RETURN!!!!!!!" << std::endl;
+  return nullptr;
 }
 
 int ShaderManager::GetLocation(const std::string &name,

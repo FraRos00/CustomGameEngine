@@ -13,20 +13,12 @@ Animation::Animation(std::string ssPath, int startX, int startY, int frameWidth,
   ResourceManager &rm = ResourceManager::GetInstance();
   rm.LoadTextureFromPath(ssPath);
   spritesheet = rm.GetTexture(ssPath);
-  shader = ShaderManager::GetInstance().GetShader("red");
-  if (shader == nullptr)
-    std::cout
-        << "FIRST SHADER IS NULLPTR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-        << std::endl;
-  else
-
-    std::cout << "FIRST SHADER IS [NOT] "
-                 "NULLPTR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-              << std::endl;
+  ShaderManager &sm = ShaderManager::GetInstance();
+  shader = sm.GetShader("red");
 }
 
 Animation::Animation(const Animation &other)
-    : ssPath(other.ssPath), frameCount(other.frameCount),
+    : ssPath(other.ssPath), shader(other.shader), frameCount(other.frameCount),
       currentFrame(other.currentFrame), frameSpeed(other.frameSpeed),
       timer(other.timer), frameWidth(other.frameWidth),
       frameHeight(other.frameHeight), scale(other.scale), startX(other.startX),
@@ -58,6 +50,7 @@ Animation &Animation::operator=(const Animation &other) {
     loop = other.loop;
     currentFrame = other.currentFrame;
     timer = other.timer;
+    shader = other.shader;
 
     if (!ssPath.empty()) {
       ResourceManager &rm = ResourceManager::GetInstance();
@@ -72,14 +65,15 @@ Animation &Animation::operator=(const Animation &other) {
 
 Animation::Animation(Animation &&other) noexcept
     : ssPath(std::move(other.ssPath)), spritesheet(other.spritesheet),
-      frameCount(other.frameCount), currentFrame(other.currentFrame),
-      frameSpeed(other.frameSpeed), timer(other.timer),
-      frameWidth(other.frameWidth), frameHeight(other.frameHeight),
-      scale(other.scale), startX(other.startX), startY(other.startY),
-      loop(other.loop) {
+      shader(other.shader), frameCount(other.frameCount),
+      currentFrame(other.currentFrame), frameSpeed(other.frameSpeed),
+      timer(other.timer), frameWidth(other.frameWidth),
+      frameHeight(other.frameHeight), scale(other.scale), startX(other.startX),
+      startY(other.startY), loop(other.loop) {
 
   other.spritesheet = nullptr;
   other.ssPath.clear();
+  other.shader = nullptr;
 }
 
 Animation &Animation::operator=(Animation &&other) noexcept {
@@ -101,9 +95,11 @@ Animation &Animation::operator=(Animation &&other) noexcept {
   startX = other.startX;
   startY = other.startY;
   loop = other.loop;
+  shader = other.shader;
 
   other.spritesheet = nullptr;
   other.ssPath.clear();
+  other.shader = nullptr;
 
   return *this;
 }
@@ -127,15 +123,11 @@ void Animation::Draw(Vector2 position, Color tint) const {
     int frameX = startX + currentFrame * frameWidth;
     Rectangle src{(float)frameX, (float)startY, (float)frameWidth,
                   (float)frameHeight};
-    if (shader == nullptr)
-      std::cout
-          << "SHADER IS NULLPTR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-          << std::endl;
-    // BeginShaderMode(*shader);
+    BeginShaderMode(*shader);
     DrawTexturePro(*spritesheet, src, dst,
                    {frameWidth * scale / 2, frameHeight * scale / 2}, 0.0f,
                    tint);
-    // EndShaderMode();
+    EndShaderMode();
   } else {
     DrawRectangleRec(dst, RED);
   }
