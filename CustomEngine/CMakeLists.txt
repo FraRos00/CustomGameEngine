@@ -49,13 +49,13 @@ find_package(raylib QUIET)
 
 if(NOT raylib_FOUND)
     message(WARNING "Raylib non trovato nel sistema. Lo scarico via FetchContent.")
-    include(FetchContent)
-    FetchContent_Declare(
-        raylib
-        GIT_REPOSITORY https://github.com/raysan5/raylib.git
-        GIT_TAG 5.5
-    )
-    FetchContent_MakeAvailable(raylib)
+    # include(FetchContent)
+    # FetchContent_Declare(
+    #     raylib
+    #     GIT_REPOSITORY https://github.com/raysan5/raylib.git
+    #     GIT_TAG 5.5
+    # )
+    # FetchContent_MakeAvailable(raylib)
 else()
     message(STATUS "Raylib trovato nel sistema.")
 endif()
@@ -76,7 +76,7 @@ if (WIN32)
         opengl32
         gdi32
         winmm
-        waylandscale
+        # waylandscale
     )
 else()
     target_link_libraries(${BIN_NAME}
@@ -86,8 +86,8 @@ else()
         dl
         pthread
         rt
-        waylandscale
-        wayland-client
+        # waylandscale
+        # wayland-client
     )
 endif()
 

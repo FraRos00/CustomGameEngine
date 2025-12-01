@@ -1,12 +1,8 @@
 #include "core/ResourceManager.hpp"
 #include <iostream>
-<<<<<<< HEAD
-=======
-#include <memory>
-    >>>>>>> dev
 #include <raylib.h>
 
-    ResourceManager &ResourceManager::GetInstance() {
+ResourceManager &ResourceManager::GetInstance() {
   static ResourceManager instance;
   return instance;
 }
