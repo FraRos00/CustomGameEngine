@@ -17,8 +17,13 @@
           name = "customengine-env";
 
           buildInputs = [
+            pkgs.cmake
+            pkgs.gcc
             pkgs.raylib
             pkgs.glfw
+            pkgs.pkg-config
+            pkgs.gdb
+            pkgs.clang-tools      # clangd, clang-format, clang-tidy
           ];
 
           shellHook = ''
